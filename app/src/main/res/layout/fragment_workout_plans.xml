@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="de.itdude.gymdude.viewmodel.WorkoutPlansViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/status_bar_height"
+        tools:context=".ui.fragment.MenuFragment">
+
+        <Spinner
+            android:id="@+id/workout_plan_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:overlapAnchor="false"
+            android:padding="@dimen/space_s"
+            android:spinnerMode="dropdown"
+            app:dropDownLayout="@{@layout/spinner_dropdown}"
+            app:hideSelected="@{true}"
+            app:items="@{vm.workoutPlans}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:onSelect="@{vm.onSelectPlan}"
+            app:selectedLayout="@{@layout/spinner_selected}"
+            tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/workout_rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/space_xs"
+            android:paddingBottom="@dimen/space_xxl"
+            app:dragColor="@{@color/colorPrimary}"
+            app:dragViewID="@{@id/workout_item_drag_view}"
+            app:itemBinding="@{vm.itemBinding}"
+            app:itemLayout="@{@layout/item_workout}"
+            app:items="@{vm.workouts}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/workout_plan_spinner"
+            app:viewModel="@{vm}"
+            app:viewModelBinding="@{vm.viewModelBinding}"
+            tools:listitem="@layout/item_workout" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_workout_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_m"
+            android:layout_marginBottom="@dimen/space_xl"
+            android:elevation="@dimen/space_s"
+            android:onClick="@{() -> vm.addItem()}"
+            android:src="@drawable/ic_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/workout_rv"
+            app:maxImageSize="@dimen/space_l" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -11,7 +11,7 @@
 
         <variable
             name="vm"
-            type="de.itdude.gymdude.viewmodel.WorkoutViewModel" />
+            type="de.itdude.gymdude.viewmodel.WorkoutPlansViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -19,7 +19,8 @@
         android:layout_height="@dimen/space_xl"
         android:layout_margin="@dimen/space_xs"
         app:cardBackgroundColor="#AAAAAA"
-        app:cardCornerRadius="@dimen/space_s">
+        app:cardCornerRadius="@dimen/space_s"
+        android:onClick="@{() -> vm.startWorkout(item)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

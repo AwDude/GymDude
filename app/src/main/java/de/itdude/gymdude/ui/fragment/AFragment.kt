@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import de.itdude.gymdude.di.Injectable
 import de.itdude.gymdude.util.autoCleared
@@ -34,7 +33,7 @@ abstract class AFragment<VM : AViewModel, BIND : ViewDataBinding> : Fragment(), 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get<VM>(getViewModelClass().java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get<VM>(getViewModelClass().java)
         viewModel.navigate = { direction -> findNavController().navigate(direction) }
         binding.lifecycleOwner = viewLifecycleOwner
 

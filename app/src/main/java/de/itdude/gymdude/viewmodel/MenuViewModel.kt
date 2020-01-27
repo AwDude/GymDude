@@ -14,6 +14,6 @@ class MenuViewModel @Inject constructor() : AViewModel() {
     }
 
     fun showWorkout() {
-        navigate(MenuFragmentDirections.actionShowWorkout())
+        navigate(MenuFragmentDirections.actionShowWorkoutPlans())
     }
 }

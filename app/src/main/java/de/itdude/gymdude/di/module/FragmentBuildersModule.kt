@@ -18,10 +18,7 @@ package de.itdude.gymdude.di.module
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import de.itdude.gymdude.ui.fragment.ExerciseFragment
-import de.itdude.gymdude.ui.fragment.MenuFragment
-import de.itdude.gymdude.ui.fragment.SettingsFragment
-import de.itdude.gymdude.ui.fragment.WorkoutFragment
+import de.itdude.gymdude.ui.fragment.*
 
 @Suppress("unused")
 @Module
@@ -35,6 +32,9 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeExerciseFragment(): ExerciseFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeWorkoutPlansFragment(): WorkoutPlansFragment
 
     @ContributesAndroidInjector
     abstract fun contributeWorkoutFragment(): WorkoutFragment

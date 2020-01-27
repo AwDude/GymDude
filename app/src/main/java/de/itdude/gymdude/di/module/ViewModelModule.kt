@@ -46,6 +46,11 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
+    @ViewModelKey(WorkoutPlansViewModel::class)
+    abstract fun bindWorkoutPlansViewModel(workoutPlansViewModel: WorkoutPlansViewModel): ViewModel
+
+    @Binds
+    @IntoMap
     @ViewModelKey(WorkoutViewModel::class)
     abstract fun bindWorkoutViewModel(workoutViewModel: WorkoutViewModel): ViewModel
 

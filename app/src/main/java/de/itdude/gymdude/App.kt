@@ -16,22 +16,22 @@
 
 package de.itdude.gymdude
 
-import android.app.Activity
 import android.app.Application
+import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
+import dagger.android.HasAndroidInjector
 import de.itdude.gymdude.di.AppInjector
 import javax.inject.Inject
 
 
-class App : Application(), HasActivityInjector {
+class App : Application(), HasAndroidInjector {
     @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
     override fun onCreate() {
         super.onCreate()
         AppInjector.init(this)
     }
 
-    override fun activityInjector() = dispatchingAndroidInjector
+    override fun androidInjector(): AndroidInjector<Any>? = dispatchingAndroidInjector
 }
