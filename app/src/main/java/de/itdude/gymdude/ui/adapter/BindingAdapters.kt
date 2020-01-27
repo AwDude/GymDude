@@ -1,14 +1,19 @@
 package de.itdude.gymdude.ui.adapter
 
+import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.databinding.BindingAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import de.itdude.gymdude.ui.adapter.recyclerview.ItemMoveCallback
 import de.itdude.gymdude.ui.adapter.recyclerview.RecyclerViewAdapter
 import de.itdude.gymdude.util.LiveDataList
@@ -77,4 +82,15 @@ private fun createHiddenSelectionArrayAdapter(
                 convertView.layoutParams = showParams
             }
         }
+}
+
+@BindingAdapter("pageBundles", "fragmentClass")
+fun ViewPager2.bindPages(pages: List<Bundle>, fragmentClass: String) = adapter ?: let {
+    @Suppress("UNCHECKED_CAST") val clazz = Class.forName(fragmentClass) as Class<Fragment>
+    adapter = object : FragmentStateAdapter(findFragment<Fragment>()) {
+        override fun getItemCount() = pages.size
+        override fun createFragment(position: Int) = clazz.newInstance().apply {
+            arguments = pages[position]
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package de.itdude.gymdude.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import de.itdude.gymdude.di.Injectable
 import de.itdude.gymdude.util.autoCleared
 import de.itdude.gymdude.viewmodel.AViewModel
+import de.itdude.gymdude.viewmodel.WorkoutViewModel
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -28,16 +30,14 @@ abstract class AFragment<VM : AViewModel, BIND : ViewDataBinding> : Fragment(), 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, getLayoutID(), container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(this, viewModelFactory).get<VM>(getViewModelClass().java)
         viewModel.navigate = { direction -> findNavController().navigate(direction) }
-        binding.lifecycleOwner = viewLifecycleOwner
 
+        binding = DataBindingUtil.inflate(inflater, getLayoutID(), container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.setVariable(getViewModelBindingID(), viewModel)
+
+        return binding.root
     }
 
     abstract fun getViewModelClass(): KClass<VM>

@@ -38,4 +38,7 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeWorkoutFragment(): WorkoutFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeWorkoutExerciseFragment(): WorkoutExerciseFragment
 }

@@ -5,16 +5,42 @@
 
     <data>
 
+        <import type="de.itdude.gymdude.ui.fragment.WorkoutExerciseFragment" />
+
         <variable
             name="vm"
             type="de.itdude.gymdude.viewmodel.WorkoutViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="@dimen/status_bar_height"
-        tools:context=".ui.fragment.MenuFragment">
+        tools:context=".ui.fragment.WorkoutFragment">
+
+        <TextView
+            android:id="@+id/workout_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/space_m"
+            android:text="@{vm.workoutName}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="WORKOUT NAME" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:pageBundles="@{vm.exercises}"
+            app:fragmentClass='@{"de.itdude.gymdude.ui.fragment.WorkoutExerciseFragment"}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/workout_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

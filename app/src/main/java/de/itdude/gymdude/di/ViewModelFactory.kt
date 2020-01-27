@@ -1,4 +1,4 @@
-package de.itdude.gymdude.viewmodel
+package de.itdude.gymdude.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

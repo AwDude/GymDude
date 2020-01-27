@@ -23,7 +23,7 @@ class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
     }
 
     // TODO create / modify dialog
-    fun addItem() = workouts.add("Item ${workouts.size}")
+    fun addItem() = workouts.add("Workout ${workouts.size}")
 
     // TODO "you sure?" dialog
     fun removeItem(item: String) = workouts.remove(item)
