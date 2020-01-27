@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Gym Dude</string>
+    <string name="main_btn_exercises">Übungen</string>
+    <string name="main_btn_workouts">Trainingspläne</string>
+    <string name="main_btn_settings">Einstellungen</string>
+
+    <string name="content_workout_delete_btn">press to delete this workout</string>
+    <string name="content_workout_drag_btn">change workout order by drag and drop</string>
+</resources>
