@@ -17,6 +17,8 @@ import androidx.viewpager2.widget.ViewPager2
 import de.itdude.gymdude.ui.adapter.recyclerview.ItemMoveCallback
 import de.itdude.gymdude.ui.adapter.recyclerview.RecyclerViewAdapter
 import de.itdude.gymdude.util.LiveDataList
+import kotlin.math.abs
+import kotlin.math.max
 
 
 @BindingAdapter(
@@ -92,5 +94,25 @@ fun ViewPager2.bindPages(pages: List<Bundle>, fragmentClass: String) = adapter ?
         override fun createFragment(position: Int) = clazz.newInstance().apply {
             arguments = pages[position]
         }
+    }
+}
+
+@BindingAdapter("zoom", "zoomFade")
+fun ViewPager2.bindZoom(zoom: Float, zoomFade: Float) = this.setPageTransformer { page, position ->
+    if (-1 <= position && position <= 1) {
+        val scaleFactor = max(zoom, 1 - abs(position))
+        val vertMargin = height * (1 - scaleFactor) / 2
+        val horzMargin = width * (1 - scaleFactor) / 2
+
+        page.translationX = if (position < 0) {
+            horzMargin - vertMargin / 2
+        } else {
+            horzMargin + vertMargin / 2
+        }
+        page.scaleX = scaleFactor
+        page.scaleY = scaleFactor
+        page.alpha = zoomFade + (((scaleFactor - zoomFade) / (1 - zoomFade)) * (1 - zoomFade))
+    } else {
+        page.alpha = 0f
     }
 }

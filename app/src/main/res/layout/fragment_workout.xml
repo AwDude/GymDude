@@ -20,7 +20,7 @@
         tools:context=".ui.fragment.WorkoutFragment">
 
         <TextView
-            android:id="@+id/workout_name"
+            android:id="@+id/workout_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/space_m"
@@ -30,16 +30,30 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="WORKOUT NAME" />
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/workout_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/workout_name_tv"
+            app:tabMode="scrollable" />
+
         <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/pager"
+            android:id="@+id/workput_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:pageBundles="@{vm.exercises}"
+            android:padding="@dimen/space_m"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            app:zoom="@{0.9f}"
+            app:zoomFade="@{0.5f}"
             app:fragmentClass='@{"de.itdude.gymdude.ui.fragment.WorkoutExerciseFragment"}'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/workout_name" />
+            app:layout_constraintTop_toBottomOf="@+id/workout_tabs"
+            app:pageBundles="@{vm.exercises}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
