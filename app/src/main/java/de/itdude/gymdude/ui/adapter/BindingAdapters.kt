@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import de.itdude.gymdude.ui.adapter.recyclerview.ItemMoveCallback
 import de.itdude.gymdude.ui.adapter.recyclerview.RecyclerViewAdapter
 import de.itdude.gymdude.util.LiveDataList
@@ -116,3 +118,9 @@ fun ViewPager2.bindZoom(zoom: Float, zoomFade: Float) = this.setPageTransformer 
         page.alpha = 0f
     }
 }
+
+@BindingAdapter("viewPager", "onGetTabLabel")
+fun TabLayout.bindMediator(viewPager2: ViewPager2, onGetTabLabel: (Int) -> String) =
+    TabLayoutMediator(this, viewPager2) { tab, position ->
+        tab.text = onGetTabLabel(position)
+    }.attach()

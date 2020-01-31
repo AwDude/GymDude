@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="de.itdude.gymdude.ui.fragment.WorkoutExerciseFragment" />
-
         <variable
             name="vm"
             type="de.itdude.gymdude.viewmodel.WorkoutViewModel" />
@@ -37,23 +35,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/workout_name_tv"
-            app:tabMode="scrollable" />
+            app:onGetTabLabel='@{vm.onGetTabLabel}'
+            app:tabMode="scrollable"
+            app:viewPager="@{workoutPager}" />
 
         <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/workput_pager"
+            android:id="@+id/workout_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:padding="@dimen/space_m"
-            android:clipToPadding="false"
+            android:layout_marginBottom="@dimen/nav_bar_height"
             android:clipChildren="false"
-            app:zoom="@{0.9f}"
-            app:zoomFade="@{0.5f}"
+            android:clipToPadding="false"
+            android:padding="@dimen/space_m"
             app:fragmentClass='@{"de.itdude.gymdude.ui.fragment.WorkoutExerciseFragment"}'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/workout_tabs"
-            app:pageBundles="@{vm.exercises}" />
+            app:pageBundles="@{vm.exercises}"
+            app:zoom="@{0.92f}"
+            app:zoomFade="@{0.5f}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

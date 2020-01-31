@@ -21,12 +21,13 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import de.itdude.gymdude.App
+import de.itdude.gymdude.di.module.AppModule
 import de.itdude.gymdude.di.module.MainActivityModule
 import de.itdude.gymdude.di.module.ViewModelModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AndroidInjectionModule::class, ViewModelModule::class, MainActivityModule::class])
+@Component(modules = [AppModule::class, AndroidInjectionModule::class, ViewModelModule::class, MainActivityModule::class])
 interface AppComponent {
 
     @Component.Builder
