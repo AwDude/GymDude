@@ -12,5 +12,8 @@ class ExerciseViewModel @Inject constructor() : AViewModel() {
 
     val items = LiveDataList<String>()
 
-    fun addItem() = items.add("Item ${items.size}")
+    fun addItem() {
+        items.add("Item ${items.size}")
+        repo.test()
+    }
 }

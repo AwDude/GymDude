@@ -1,10 +1,14 @@
 package de.itdude.gymdude.repo
 
+import android.util.Log
 import io.realm.Realm
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class Repository @Inject constructor(private val db: Realm) {
+    fun test() {
+        Log.e("Repo", "Success")
+    }
 
 }
