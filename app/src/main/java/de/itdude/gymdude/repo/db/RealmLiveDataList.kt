@@ -10,7 +10,7 @@ import io.realm.RealmResults
 class RealmLiveDataList<T : RealmModel>(private val results: RealmResults<T>) : LiveDataList<T>() {
 
     private val listener =
-        OrderedRealmCollectionChangeListener<RealmResults<T>> { results, changeSet ->
+        OrderedRealmCollectionChangeListener<RealmResults<T>> { _, changeSet ->
             if (!hasActiveObservers()) {
                 return@OrderedRealmCollectionChangeListener
             }
