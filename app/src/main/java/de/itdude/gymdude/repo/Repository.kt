@@ -13,9 +13,9 @@ import javax.inject.Singleton
 
 @Suppress("RedundantLambdaArrow")
 @Singleton
-class Repository @Inject constructor(private val resources: Resources) {
+class Repository @Inject constructor(private val resources: Resources, private val db: Realm) {
 
-    fun addExercise(exercise: Exercise, onError: (String) -> Unit): Unit = withDB { db ->
+    fun addExercise(exercise: Exercise, onError: (String) -> Unit) {
         if (db.where<Exercise>().equalTo("name", exercise.name).findFirst() == null) {
             db.executeTransactionAsync({ asyncDB ->
                 val bodyPart = asyncDB.where<BodyPart>().equalTo("name", exercise.bodyPart?.name).findFirst()
@@ -29,10 +29,6 @@ class Repository @Inject constructor(private val resources: Resources) {
         }
     }
 
-    fun getExercises(): LiveDataList<Exercise> =
-        Realm.getDefaultInstance().where<Exercise>().findAllAsync().asLiveData()
-
-    private inline fun <R> withDB(runWithDB: (Realm) -> R) =
-        Realm.getDefaultInstance().use { runWithDB(it) }
+    fun getExercises(): LiveDataList<Exercise> = db.where<Exercise>().findAllAsync().asLiveData()
 
 }

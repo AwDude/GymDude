@@ -71,6 +71,9 @@ open class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
         }
     }
 
+    @Synchronized
+    fun hasListObservers() = listObservers.isNotEmpty()
+
     private fun getLifecycleOwner(context: Context): LifecycleOwner {
         var ctx = context
         while (ctx !is LifecycleOwner) {
@@ -82,61 +85,50 @@ open class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
     fun move(fromIndex: Int, toIndex: Int) {
         val item = list.removeAt(fromIndex)
         list.add(toIndex, item)
-        action = { obs -> obs.notifyItemMoved(fromIndex, toIndex) }
-        notifyObserver()
+        notifyItemMoved(fromIndex, toIndex)
     }
 
     override fun add(element: T) = list.add(element).also {
-        action = { obs -> obs.notifyItemInserted(size) }
-        notifyObserver()
+        notifyItemInserted(size)
     }
 
     override fun add(index: Int, element: T) = list.add(index, element).also {
-        action = { obs -> obs.notifyItemInserted(index) }
-        notifyObserver()
+        notifyItemInserted(index)
     }
 
     override fun addAll(index: Int, elements: Collection<T>) = list.addAll(index, elements).also {
-        action = { obs -> obs.notifyItemRangeInserted(index, elements.size) }
-        notifyObserver()
+        notifyItemRangeInserted(index, elements.size)
     }
 
     override fun addAll(elements: Collection<T>) = list.addAll(elements).also {
-        action = { obs -> obs.notifyItemRangeInserted(size, elements.size) }
-        notifyObserver()
+        notifyItemRangeInserted(size, elements.size)
     }
 
     override fun clear() = list.clear().also {
-        action = { obs -> obs.notifyItemRangeRemoved(0, size) }
-        notifyObserver()
+        notifyItemRangeRemoved(0, size)
     }
 
     override fun remove(element: T): Boolean {
         val removeIndex = list.indexOf(element)
         val wasRemoved = list.remove(element)
-        action = { obs -> obs.notifyItemRemoved(removeIndex) }
-        notifyObserver()
+        notifyItemRemoved(removeIndex)
         return wasRemoved
     }
 
     override fun removeAll(elements: Collection<T>) = list.removeAll(elements).also {
-        action = { obs -> obs.notifyDataSetChanged() }
-        notifyObserver()
+        notifyDataSetChanged()
     }
 
     override fun removeAt(index: Int) = list.removeAt(index).also {
-        action = { obs -> obs.notifyItemRemoved(index) }
-        notifyObserver()
+        notifyItemRemoved(index)
     }
 
     override fun retainAll(elements: Collection<T>) = list.retainAll(elements).also {
-        action = { obs -> obs.notifyDataSetChanged() }
-        notifyObserver()
+        notifyDataSetChanged()
     }
 
     override fun set(index: Int, element: T) = list.set(index, element).also {
-        action = { obs -> obs.notifyItemChanged(index) }
-        notifyObserver()
+        notifyItemChanged(index)
     }
 
     override fun contains(element: T) = list.contains(element)
@@ -158,4 +150,45 @@ open class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
     override fun listIterator(index: Int) = list.listIterator(index)
 
     override fun subList(fromIndex: Int, toIndex: Int) = list.subList(fromIndex, toIndex)
+
+    protected fun notifyDataSetChanged() {
+        action = { obs -> obs.notifyDataSetChanged() }
+        notifyObserver()
+    }
+
+    protected fun notifyItemChanged(position: Int) {
+        action = { obs -> obs.notifyItemChanged(position) }
+        notifyObserver()
+    }
+
+    protected fun notifyItemRangeChanged(positionStart: Int, itemCount: Int) {
+        action = { obs -> obs.notifyItemRangeChanged(positionStart, itemCount) }
+        notifyObserver()
+    }
+
+    protected fun notifyItemInserted(position: Int) {
+        action = { obs -> obs.notifyItemInserted(position) }
+        notifyObserver()
+    }
+
+    protected fun notifyItemRangeInserted(positionStart: Int, itemCount: Int) {
+        action = { obs -> obs.notifyItemRangeInserted(positionStart, itemCount) }
+        notifyObserver()
+    }
+
+    protected fun notifyItemRemoved(position: Int) {
+        action = { obs -> obs.notifyItemRemoved(position) }
+        notifyObserver()
+    }
+
+    @Suppress("SameParameterValue")
+    protected fun notifyItemRangeRemoved(positionStart: Int, itemCount: Int) {
+        action = { obs -> obs.notifyItemRangeRemoved(positionStart, itemCount) }
+        notifyObserver()
+    }
+
+    protected fun notifyItemMoved(fromPosition: Int, toPosition: Int) {
+        action = { obs -> obs.notifyItemMoved(fromPosition, toPosition) }
+        notifyObserver()
+    }
 }

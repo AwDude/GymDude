@@ -20,13 +20,24 @@ import android.os.Bundle
 import android.view.WindowManager
 import dagger.android.support.DaggerAppCompatActivity
 import de.itdude.gymdude.R
+import io.realm.Realm
+import javax.inject.Inject
 
-class MainActivity : DaggerAppCompatActivity() {
+class MainActivity: DaggerAppCompatActivity() {
+
+    @Suppress("ProtectedInFinal")
+    @Inject
+    protected lateinit var db: Realm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         setContentView(R.layout.activity_main)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        db.close()
     }
 
 }
