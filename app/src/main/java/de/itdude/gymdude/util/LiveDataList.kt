@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer
 
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
+open class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
 
     interface ListObserver {
         fun notifyDataSetChanged()
@@ -47,6 +47,7 @@ class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
     fun observe(context: Context, listObserver: ListObserver) =
         observe(getLifecycleOwner(context), listObserver)
 
+    @Synchronized
     fun observe(lifecycleOwner: LifecycleOwner, listObserver: ListObserver) {
         listObservers.add(listObserver)
         if (listObservers.size == 1) {
@@ -54,12 +55,14 @@ class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
         }
     }
 
+    @Synchronized
     fun stopObserve() {
         super.removeObserver(observer)
         listObservers.clear()
         action = null
     }
 
+    @Synchronized
     fun stopObserve(listObserver: ListObserver) {
         listObservers.remove(listObserver)
         if (listObservers.isEmpty()) {

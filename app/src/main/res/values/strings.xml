@@ -1,9 +1,18 @@
 <resources>
+
     <string name="app_name">Gym Dude</string>
+
+    <!-- UI ELEMENTS -->
     <string name="main_btn_exercises">Übungen</string>
     <string name="main_btn_workouts">Trainingspläne</string>
     <string name="main_btn_settings">Einstellungen</string>
 
+    <!-- CONTENT DESCRIPTIONS -->
     <string name="content_workout_delete_btn">press to delete this workout</string>
     <string name="content_workout_drag_btn">change workout order by drag and drop</string>
+
+    <!-- ERRORS -->
+    <string name="error_name_in_use">This name is already used. Please use an other one.</string>
+    <string name="error_db">A database error occurred. Please retry.</string>
+
 </resources>

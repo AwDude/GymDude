@@ -27,7 +27,7 @@ import de.itdude.gymdude.di.module.ViewModelModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, AndroidInjectionModule::class, ViewModelModule::class, MainActivityModule::class])
+@Component(modules = [AndroidInjectionModule::class, AppModule::class, ViewModelModule::class, MainActivityModule::class])
 interface AppComponent {
 
     @Component.Builder
