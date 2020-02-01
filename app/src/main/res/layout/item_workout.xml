@@ -31,13 +31,13 @@
                 android:layout_height="wrap_content"
                 android:text="@{item}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/item_delete_btn"
+                app:layout_constraintEnd_toStartOf="@+id/exercise_delete_btn"
                 app:layout_constraintStart_toEndOf="@+id/workout_item_drag_view"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="ITEM" />
 
             <ImageView
-                android:id="@+id/item_delete_btn"
+                android:id="@+id/exercise_delete_btn"
                 style="?android:borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

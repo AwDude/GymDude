@@ -1,6 +1,7 @@
 package de.itdude.gymdude.repo
 
 import android.content.res.Resources
+import android.util.Log
 import de.itdude.gymdude.R
 import de.itdude.gymdude.repo.db.asLiveData
 import de.itdude.gymdude.repo.db.model.BodyPart
@@ -18,7 +19,8 @@ class Repository @Inject constructor(private val resources: Resources, private v
     fun addExercise(exercise: Exercise, onError: (String) -> Unit) {
         if (db.where<Exercise>().equalTo("name", exercise.name).findFirst() == null) {
             db.executeTransactionAsync({ asyncDB ->
-                val bodyPart = asyncDB.where<BodyPart>().equalTo("name", exercise.bodyPart?.name).findFirst()
+                val bodyPart =
+                    asyncDB.where<BodyPart>().equalTo("name", exercise.bodyPart?.name).findFirst()
                 if (bodyPart != null) {
                     exercise.bodyPart = bodyPart
                 }
@@ -29,6 +31,15 @@ class Repository @Inject constructor(private val resources: Resources, private v
         }
     }
 
-    fun getExercises(): LiveDataList<Exercise> = db.where<Exercise>().findAllAsync().asLiveData()
+    fun getExercises(): LiveDataList<Exercise> =
+        db.where<Exercise>().sort("name").findAllAsync().asLiveData()
+
+    fun deleteExercise(exercise: Exercise, onError: (String) -> Unit) {
+        val name = exercise.name
+        db.executeTransactionAsync({ asyncDB ->
+            val dbExercise = asyncDB.where<Exercise>().equalTo("name", name).findAll()
+            dbExercise.deleteAllFromRealm()
+        }, { _ -> onError(resources.getString(R.string.error_db)) })
+    }
 
 }

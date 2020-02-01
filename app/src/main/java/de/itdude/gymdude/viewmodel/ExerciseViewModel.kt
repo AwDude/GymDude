@@ -10,17 +10,21 @@ class ExerciseViewModel @Inject constructor() : AViewModel() {
 
     // provides RecyclerView the fields where to put created bindings (via BindingAdapter)
     val viewModelBinding: Int = BR.vm
-    val itemBinding: Int = BR.item
+    val itemBinding: Int = BR.exercise
 
-    lateinit var items: LiveDataList<Exercise>
+    lateinit var exercises: LiveDataList<Exercise>
 
     override fun onCreate() {
-        items = repo.getExercises()
+        exercises = repo.getExercises()
     }
 
-    fun addItem() {
-        val newExercise = Exercise("Bankdrücken ${items.size}", BodyPart("Brust"))
+    fun addExercise() {
+        val newExercise = Exercise("Bankdrücken ${exercises.size}", BodyPart("Brust"))
         repo.addExercise(newExercise) { error -> showToast(error) }
     }
+
+    fun deleteExercise(exercise: Exercise) =
+        repo.deleteExercise(exercise) { error -> showToast(error) }
+
 
 }
