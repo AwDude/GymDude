@@ -6,14 +6,19 @@
     <string name="main_btn_exercises">Übungen</string>
     <string name="main_btn_workouts">Trainingspläne</string>
     <string name="main_btn_settings">Einstellungen</string>
+    <string name="days_ago_text">Vor %s Tagen</string>
+    <string name="yesterday_text">Gestern</string>
+    <string name="today_text">Heute</string>
+    <string name="never_text">Noch nie</string>
 
     <!-- CONTENT DESCRIPTIONS -->
-    <string name="content_exercise_delete_btn">press to delete this workout</string>
-    <string name="content_workout_delete_btn">press to delete this workout</string>
-    <string name="content_workout_drag_btn">change workout order by drag and drop</string>
+    <string name="content_exercise_history_btn">Drücken um den Übungs Log zu öffnen</string>
+    <string name="content_exercise_delete_btn">Drücken um diese Übung zu löschen</string>
+    <string name="content_workout_delete_btn">Drücken um dieses Training zu löschen</string>
+    <string name="content_workout_drag_btn">Verändere die Reihenfolge des Trainingsplans durch Drag and Drop</string>
 
     <!-- ERRORS -->
-    <string name="error_name_in_use">This name was already used. Please take an other one.</string>
-    <string name="error_db">A database error occurred. Please retry.</string>
+    <string name="error_name_in_use">Name ist bereits vergeben</string>
+    <string name="error_db">Fehler beim Speichern</string>
 
 </resources>
