@@ -11,12 +11,10 @@ abstract class AViewModel : ViewModel() {
 
     @Inject
     protected lateinit var repo: Repository
-
     @Inject
     protected lateinit var resources: Resources
 
     lateinit var navigate: ((NavDirections) -> Unit)
-
     lateinit var showToast: ((String) -> Unit)
 
     @Inject @VisibleForTesting

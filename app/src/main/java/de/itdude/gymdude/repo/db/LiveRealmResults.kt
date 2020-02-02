@@ -2,12 +2,9 @@ package de.itdude.gymdude.repo.db
 
 import android.util.Log
 import de.itdude.gymdude.util.LiveDataList
-import io.realm.OrderedCollectionChangeSet
-import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.RealmModel
-import io.realm.RealmResults
+import io.realm.*
 
-class RealmLiveDataList<T : RealmModel>(private val results: RealmResults<T>) : LiveDataList<T>() {
+class LiveRealmResults<T : RealmModel>(private var results: RealmResults<T>) : LiveDataList<T>() {
 
     private val listener =
         OrderedRealmCollectionChangeListener<RealmResults<T>> { _, changeSet ->
@@ -65,6 +62,44 @@ class RealmLiveDataList<T : RealmModel>(private val results: RealmResults<T>) : 
         }
     }
 
+    fun sort(fieldName: String) {
+        val temp = results.sort(fieldName).apply { addChangeListener(listener) }
+        if (results.isValid) {
+            results.removeChangeListener(listener)
+        }
+        results = temp
+        value = temp
+    }
+
+    fun sort(fieldName: String, sortOrder: Sort) {
+        val temp = results.sort(fieldName, sortOrder).apply { addChangeListener(listener) }
+        if (results.isValid) {
+            results.removeChangeListener(listener)
+        }
+        results = temp
+        value = temp
+    }
+
+    fun sort(fieldName1: String, sortOrder1: Sort, fieldName2: String, sortOrder2: Sort) {
+        val temp = results.sort(fieldName1, sortOrder1, fieldName2, sortOrder2).apply {
+            addChangeListener(listener)
+        }
+        if (results.isValid) {
+            results.removeChangeListener(listener)
+        }
+        results = temp
+        value = temp
+    }
+
+    fun sort(fieldNames: Array<String?>, sortOrders: Array<Sort?>) {
+        val temp = results.sort(fieldNames, sortOrders).apply { addChangeListener(listener) }
+        if (results.isValid) {
+            results.removeChangeListener(listener)
+        }
+        results = temp
+        value = temp
+    }
+
 }
 
-fun <T : RealmModel> RealmResults<T>.asLiveData() = RealmLiveDataList(this)
+fun <T : RealmModel> RealmResults<T>.asLiveData() = LiveRealmResults(this)

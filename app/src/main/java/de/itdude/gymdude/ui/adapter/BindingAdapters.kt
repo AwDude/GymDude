@@ -44,12 +44,9 @@ fun RecyclerView.bindItems(
     adapter = rvAdapter
 }
 
-@BindingAdapter(
-    "onSelect", "items", "selectedLayout", "dropDownLayout", "hideSelected", requireAll = false
-)
-fun Spinner.bindOnSelect(
-    onSelect: (Int) -> Unit, items: List<*>, selectedLayout: Int, dropDownLayout: Int?,
-    hideSelected: Boolean?
+@BindingAdapter("items", "selectedLayout", "dropDownLayout", "hideSelected", requireAll = false)
+fun Spinner.bindItems(
+    items: List<*>, selectedLayout: Int, dropDownLayout: Int?, hideSelected: Boolean?
 ) = adapter ?: let {
     adapter = if (hideSelected == true) {
         createHiddenSelectionArrayAdapter(selectedLayout, items, this)
@@ -58,12 +55,14 @@ fun Spinner.bindOnSelect(
     }.apply {
         dropDownLayout?.let { setDropDownViewResource(dropDownLayout) }
     }
+}
 
+@BindingAdapter("onSelect")
+fun Spinner.bindOnSelect(onSelect: (Int) -> Unit) {
     onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onNothingSelected(parent: AdapterView<*>?) {}
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) =
             onSelect(position)
-        }
     }
 }
 

@@ -1,6 +1,7 @@
 package de.itdude.gymdude.ui.fragment
 
 import android.os.Bundle
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +33,13 @@ abstract class AFragment<VM : AViewModel, BIND : ViewDataBinding> : Fragment(), 
         viewModel = ViewModelProvider(this, viewModelFactory).get<VM>(getViewModelClass().java)
         viewModel.navigate = { direction -> findNavController().navigate(direction) }
         viewModel.showToast = { text ->
-            Toast.makeText(activity?.applicationContext, text, Toast.LENGTH_SHORT).show()
+            if (Looper.myLooper() == null) {
+                activity?.runOnUiThread {
+                    Toast.makeText(activity?.applicationContext, text, Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(activity?.applicationContext, text, Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding = DataBindingUtil.inflate(inflater, getLayoutID(), container, false)

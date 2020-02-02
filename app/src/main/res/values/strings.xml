@@ -3,13 +3,21 @@
     <string name="app_name">Gym Dude</string>
 
     <!-- UI ELEMENTS -->
-    <string name="main_btn_exercises">Übungen</string>
-    <string name="main_btn_workouts">Trainingspläne</string>
-    <string name="main_btn_settings">Einstellungen</string>
+    <string name="exercises">Übungen</string>
+    <string name="workouts">Trainingspläne</string>
+    <string name="settings">Einstellungen</string>
     <string name="days_ago_text">Vor %s Tagen</string>
     <string name="yesterday_text">Gestern</string>
     <string name="today_text">Heute</string>
     <string name="never_text">Noch nie</string>
+    <string name="filter">Filtern</string>
+    <string name="sort">Sortieren</string>
+    <string name="sortByDateAsc">aufsteigend nach Datum</string>
+    <string name="sortByDateDesc">absteigendnach Datum</string>
+    <string name="sortByNameAsc">aufsteigend nach Name</string>
+    <string name="sortByNameDesc">absteigend nach Name</string>
+    <string name="search">Suchen</string>
+    <string name="exercise_search_hint">Suche nach Übungen</string>
 
     <!-- CONTENT DESCRIPTIONS -->
     <string name="content_exercise_history_btn">Drücken um den Übungs Log zu öffnen</string>
@@ -19,6 +27,6 @@
 
     <!-- ERRORS -->
     <string name="error_name_in_use">Name ist bereits vergeben</string>
-    <string name="error_db">Fehler beim Speichern</string>
+    <string name="error_db">Datenbank Fehler</string>
 
 </resources>

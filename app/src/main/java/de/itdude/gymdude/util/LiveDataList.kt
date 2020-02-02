@@ -6,7 +6,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 
-
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 open class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
 
@@ -33,16 +32,14 @@ open class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
         value = list
     }
 
-    override fun setValue(value: MutableList<T>?) {
+    public override fun setValue(value: MutableList<T>?) {
         value ?: return
+        action = { obs -> obs.notifyDataSetChanged() }
         list = value
-        action = { obs -> obs.notifyItemRangeChanged(0, size) }
-        super.setValue(value)
+        notifyObserver()
     }
 
-    fun notifyObserver() {
-        super.setValue(list)
-    }
+    fun notifyObserver() = super.setValue(list)
 
     fun observe(context: Context, listObserver: ListObserver) =
         observe(getLifecycleOwner(context), listObserver)
@@ -104,9 +101,7 @@ open class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
         notifyItemRangeInserted(size, elements.size)
     }
 
-    override fun clear() = list.clear().also {
-        notifyItemRangeRemoved(0, size)
-    }
+    override fun clear() = removeRange(0, size)
 
     override fun remove(element: T): Boolean {
         val removeIndex = list.indexOf(element)
@@ -117,6 +112,10 @@ open class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
 
     override fun removeAll(elements: Collection<T>) = list.removeAll(elements).also {
         notifyDataSetChanged()
+    }
+
+    fun removeRange(fromIndex: Int, toIndex: Int) = list.subList(fromIndex, toIndex).clear().also {
+        notifyItemRangeRemoved(fromIndex, toIndex - fromIndex)
     }
 
     override fun removeAt(index: Int) = list.removeAt(index).also {

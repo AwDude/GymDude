@@ -16,23 +16,35 @@
         android:paddingTop="@dimen/status_bar_height"
         tools:context=".ui.fragment.WorkoutPlansFragment">
 
-        <Spinner
-            android:id="@+id/workout_plan_spinner"
+        <Toolbar
+            android:id="@+id/workout_plans_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:overlapAnchor="false"
-            android:padding="@dimen/space_s"
-            android:spinnerMode="dropdown"
-            app:dropDownLayout="@{@layout/spinner_dropdown}"
-            app:hideSelected="@{true}"
-            app:items="@{vm.workoutPlans}"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:contentInsetStart="0dp"
+            android:elevation="@dimen/space_s"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:onSelect="@{vm.onSelectPlan}"
-            app:selectedLayout="@{@layout/spinner_selected}"
-            tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <Spinner
+                android:id="@+id/workout_plan_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/space_xs"
+                android:background="@color/colorPrimaryDark"
+                android:overlapAnchor="false"
+                android:spinnerMode="dropdown"
+                app:dropDownLayout="@{@layout/spinner_dropdown}"
+                app:hideSelected="@{true}"
+                app:items="@{vm.workoutPlans}"
+                app:onSelect="@{vm.onSelectPlan}"
+                app:selectedLayout="@{@layout/spinner_selected}"
+                tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
+        </Toolbar>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/workout_rv"
@@ -50,7 +62,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/workout_plan_spinner"
+            app:layout_constraintTop_toBottomOf="@+id/workout_plans_toolbar"
             app:viewModel="@{vm}"
             app:viewModelBinding="@{vm.viewModelBinding}"
             tools:listitem="@layout/item_workout" />
