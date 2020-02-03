@@ -101,5 +101,3 @@ class LiveRealmResults<T : RealmModel>(private var results: RealmResults<T>) : L
     }
 
 }
-
-fun <T : RealmModel> RealmResults<T>.asLiveData() = LiveRealmResults(this)

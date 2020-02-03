@@ -3,12 +3,13 @@ package de.itdude.gymdude.viewmodel
 import androidx.appcompat.widget.SearchView
 import de.itdude.gymdude.BR
 import de.itdude.gymdude.R
-import de.itdude.gymdude.repo.db.LiveRealmResults
 import de.itdude.gymdude.model.BodyPart
 import de.itdude.gymdude.model.Exercise
 import de.itdude.gymdude.repo.db.FilterRealmResultsObserver
+import de.itdude.gymdude.repo.db.LiveRealmResults
 import de.itdude.gymdude.util.LiveDataList
 import de.itdude.gymdude.util.daysAgo
+import de.itdude.gymdude.util.sort
 import io.realm.Sort
 import javax.inject.Inject
 
@@ -26,9 +27,19 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
     private var query = ""
     private lateinit var results: LiveRealmResults<Exercise>
 
+    // declaring the function like this makes it usable as data binding callback
+    val onSort = fun(position: Int) {
+        when(position) {
+            0 -> results.sort(Exercise::lastTimeDone, Sort.ASCENDING)
+            1 -> results.sort(Exercise::lastTimeDone, Sort.DESCENDING)
+            2 -> results.sort(Exercise::name, Sort.ASCENDING)
+            3 -> results.sort(Exercise::name, Sort.DESCENDING)
+        }
+    }
+
     override fun onCreate() {
         results = repo.getExercises()
-        results.sort("name")
+        results.sort(Exercise::name.name)
         results.observeForever(filterObserver)
     }
 
@@ -62,7 +73,5 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
     override fun onCleared() = super.onCleared().also {
         results.removeObserver(filterObserver)
     }
-
-    fun sort(fieldName: String, order: Sort) = results.sort(fieldName, order)
 
 }

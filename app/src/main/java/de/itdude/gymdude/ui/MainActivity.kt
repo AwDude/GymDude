@@ -16,7 +16,10 @@
 
 package de.itdude.gymdude.ui
 
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
 import android.view.WindowManager
 import dagger.android.support.DaggerAppCompatActivity
 import de.itdude.gymdude.R
@@ -28,6 +31,7 @@ class MainActivity: DaggerAppCompatActivity() {
     @Suppress("ProtectedInFinal")
     @Inject
     protected lateinit var db: Realm
+    val clearFocusViews = ArrayList<View>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +41,23 @@ class MainActivity: DaggerAppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        clearFocusViews.clear()
         db.close()
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent) = super.dispatchTouchEvent(ev).also {
+        clearFocusViews.removeAll { view ->
+            if (view.isAttachedToWindow) {
+                val rect = Rect()
+                view.getGlobalVisibleRect(rect)
+                if (!rect.contains(ev.x.toInt(), ev.y.toInt())) {
+                    view.clearFocus()
+                }
+                false
+            } else {
+                true
+            }
+        }
     }
 
 }

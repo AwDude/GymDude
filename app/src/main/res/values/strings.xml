@@ -2,7 +2,7 @@
 
     <string name="app_name">Gym Dude</string>
 
-    <!-- UI ELEMENTS -->
+    <!-- UI -->
     <string name="exercises">Übungen</string>
     <string name="workouts">Trainingspläne</string>
     <string name="settings">Einstellungen</string>
@@ -12,12 +12,15 @@
     <string name="never_text">Noch nie</string>
     <string name="filter">Filtern</string>
     <string name="sort">Sortieren</string>
-    <string name="sortByDateAsc">aufsteigend nach Datum</string>
-    <string name="sortByDateDesc">absteigendnach Datum</string>
-    <string name="sortByNameAsc">aufsteigend nach Name</string>
-    <string name="sortByNameDesc">absteigend nach Name</string>
     <string name="search">Suchen</string>
     <string name="exercise_search_hint">Suche nach Übungen</string>
+
+    <string-array name="array_exercise_sort_options">
+        <item>aufsteigend nach Datum</item>
+        <item>absteigend nach Datum</item>
+        <item>aufsteigend nach Name</item>
+        <item>absteigend nach Name</item>
+    </string-array>
 
     <!-- CONTENT DESCRIPTIONS -->
     <string name="content_exercise_sort_btn">Drücken um die Übungen zu sortieren</string>

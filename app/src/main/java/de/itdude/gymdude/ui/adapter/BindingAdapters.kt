@@ -17,12 +17,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import de.itdude.gymdude.ui.MainActivity
 import de.itdude.gymdude.ui.adapter.recyclerview.ItemMoveCallback
 import de.itdude.gymdude.ui.adapter.recyclerview.RecyclerViewAdapter
 import de.itdude.gymdude.util.LiveDataList
 import kotlin.math.abs
 import kotlin.math.max
 
+// --- RECYCLER VIEW ---
 
 @BindingAdapter(
     "items", "itemLayout", "itemBinding", "viewModelBinding", "viewModel", "dragByLongPress",
@@ -44,6 +46,8 @@ fun RecyclerView.bindItems(
     }
     adapter = rvAdapter
 }
+
+// --- SPINNER ---
 
 @BindingAdapter("items", "selectedLayout", "dropDownLayout", "hideSelected", requireAll = false)
 fun Spinner.bindItems(
@@ -88,6 +92,8 @@ private fun createHiddenSelectionArrayAdapter(
         }
 }
 
+// --- VIEW PAGER ---
+
 @BindingAdapter("pageBundles", "fragmentClass")
 fun ViewPager2.bindPages(pages: List<Bundle>, fragmentClass: String) = adapter ?: let {
     @Suppress("UNCHECKED_CAST") val clazz = Class.forName(fragmentClass) as Class<Fragment>
@@ -125,6 +131,42 @@ fun TabLayout.bindMediator(viewPager2: ViewPager2, onGetTabLabel: (Int) -> Strin
         tab.text = onGetTabLabel(position)
     }.attach()
 
-@BindingAdapter("onQuery", requireAll = false)
+// --- SEARCH VIEW ---
+
+@BindingAdapter("onQuery")
 fun SearchView.bindQueryListener(onQuery: SearchView.OnQueryTextListener) =
     this.setOnQueryTextListener(onQuery)
+
+@BindingAdapter("hideOnExpand")
+fun SearchView.bindHideOnExpand(view: View) {
+    setOnSearchClickListener {
+        view.visibility = View.GONE
+    }
+    setOnCloseListener {
+        view.visibility = View.VISIBLE
+        false
+    }
+}
+
+@BindingAdapter("autoCollapse")
+fun SearchView.bindAutoCollapse(autoCollapseEnabled: Boolean) {
+    val activity = context
+    if (autoCollapseEnabled && activity is MainActivity) {
+        activity.clearFocusViews.add(this)
+        setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if (!hasFocus && query.isNullOrBlank()) {
+                isIconified = true
+            }
+        }
+    }
+}
+
+// --- VIEW ---
+
+@BindingAdapter("autoFocusClear")
+fun View.bindAutoFocusClear(autoFocusClearEnabled: Boolean) {
+    val activity = context
+    if (autoFocusClearEnabled && activity is MainActivity) {
+        activity.clearFocusViews.add(this)
+    }
+}

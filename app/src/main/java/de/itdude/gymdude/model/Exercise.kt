@@ -11,7 +11,7 @@ open class Exercise(
     @PrimaryKey var name: String = "",
     var bodyPart: BodyPart? = null,
     var imageUrl: String = "",
-    private var lastTimeDone: Long? = null
+    var lastTimeDone: Long? = null
 ) : RealmObject() {
 
     fun getLastTimeDone() = ZonedDateTime(lastTimeDone)
