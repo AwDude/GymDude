@@ -4,9 +4,9 @@ import androidx.appcompat.widget.SearchView
 import de.itdude.gymdude.BR
 import de.itdude.gymdude.R
 import de.itdude.gymdude.repo.db.LiveRealmResults
-import de.itdude.gymdude.repo.db.model.BodyPart
-import de.itdude.gymdude.repo.db.model.Exercise
-import de.itdude.gymdude.util.FilterRealmResultsObserver
+import de.itdude.gymdude.model.BodyPart
+import de.itdude.gymdude.model.Exercise
+import de.itdude.gymdude.repo.db.FilterRealmResultsObserver
 import de.itdude.gymdude.util.LiveDataList
 import de.itdude.gymdude.util.daysAgo
 import io.realm.Sort
@@ -19,7 +19,10 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
     val itemBinding: Int = BR.exercise
 
     val exercises = LiveDataList<Exercise>()
-    private val filterObserver = FilterRealmResultsObserver(exercises) {it.name.contains(query)}
+    private val filterObserver =
+        FilterRealmResultsObserver(exercises) {
+            it.name.contains(query)
+        }
     private var query = ""
     private lateinit var results: LiveRealmResults<Exercise>
 

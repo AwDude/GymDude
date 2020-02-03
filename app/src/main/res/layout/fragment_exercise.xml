@@ -17,18 +17,66 @@
         android:paddingTop="@dimen/status_bar_height"
         tools:context=".ui.fragment.ExerciseFragment">
 
-        <androidx.appcompat.widget.Toolbar
+        <Spinner
+            android:id="@+id/exercise_sort_spinner"
+            android:layout_width="@dimen/space_l"
+            android:layout_height="@dimen/space_l"
+            android:layout_margin="@dimen/space_m"
+            android:background="@drawable/ic_sort"
+            android:contentDescription="@string/content_exercise_sort_btn"
+            android:elevation="@dimen/space_s"
+            android:theme="@style/Widget.AppCompat.Spinner"
+            app:layout_constraintBottom_toBottomOf="@+id/exercise_toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/exercise_toolbar" />
+
+        <TextView
+            android:id="@+id/exercise_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/space_s"
+            android:text="@string/exercises"
+            app:layout_constraintBottom_toBottomOf="@+id/exercise_toolbar"
+            app:layout_constraintEnd_toStartOf="@+id/exercise_search_view"
+            app:layout_constraintStart_toEndOf="@+id/exercise_sort_spinner"
+            app:layout_constraintTop_toTopOf="@+id/exercise_toolbar"
+            tools:text="@string/exercises" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/exercise_search_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/space_s"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/exercise_toolbar"
+            app:layout_constraintEnd_toStartOf="@+id/exercise_filter_spinner"
+            app:layout_constraintStart_toEndOf="@+id/exercise_label"
+            app:layout_constraintTop_toTopOf="@+id/exercise_toolbar"
+            app:onQuery="@{vm}" />
+
+        <Spinner
+            android:id="@+id/exercise_filter_spinner"
+            android:layout_width="@dimen/space_l"
+            android:layout_height="@dimen/space_l"
+            android:layout_margin="@dimen/space_m"
+            android:background="@drawable/ic_filter"
+            android:contentDescription="@string/content_exercise_filter_btn"
+            android:elevation="@dimen/space_s"
+            android:theme="@style/Widget.AppCompat.Spinner"
+            app:layout_constraintBottom_toBottomOf="@+id/exercise_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/exercise_toolbar" />
+
+        <View
             android:id="@+id/exercise_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            android:elevation="@dimen/space_s"
+            android:elevation="@dimen/space_xs"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="@string/exercises" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exercises_rv"
@@ -42,9 +90,11 @@
             app:items="@{vm.exercises}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exercise_toolbar"
+            app:layout_constraintVertical_bias="0.0"
             app:viewModel="@{vm}"
             app:viewModelBinding="@{vm.viewModelBinding}"
             tools:listitem="@layout/item_exercise" />

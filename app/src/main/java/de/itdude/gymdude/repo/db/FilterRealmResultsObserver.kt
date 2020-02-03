@@ -1,6 +1,7 @@
-package de.itdude.gymdude.util
+package de.itdude.gymdude.repo.db
 
 import androidx.lifecycle.Observer
+import de.itdude.gymdude.util.LiveDataList
 import io.realm.RealmObject
 
 class FilterRealmResultsObserver<T : RealmObject>(

@@ -7,7 +7,7 @@
 
         <variable
             name="exercise"
-            type="de.itdude.gymdude.repo.db.model.Exercise" />
+            type="de.itdude.gymdude.model.Exercise" />
 
         <variable
             name="vm"

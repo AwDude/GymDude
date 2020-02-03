@@ -1,4 +1,4 @@
-package de.itdude.gymdude.repo.db.model
+package de.itdude.gymdude.model
 
 import de.itdude.gymdude.util.ZonedDateTime
 import de.itdude.gymdude.util.ms

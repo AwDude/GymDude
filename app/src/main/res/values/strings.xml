@@ -20,6 +20,8 @@
     <string name="exercise_search_hint">Suche nach Übungen</string>
 
     <!-- CONTENT DESCRIPTIONS -->
+    <string name="content_exercise_sort_btn">Drücken um die Übungen zu sortieren</string>
+    <string name="content_exercise_filter_btn">Drücken um die Übungen zu filtern</string>
     <string name="content_exercise_history_btn">Drücken um den Übungs Log zu öffnen</string>
     <string name="content_exercise_delete_btn">Drücken um diese Übung zu löschen</string>
     <string name="content_workout_delete_btn">Drücken um dieses Training zu löschen</string>

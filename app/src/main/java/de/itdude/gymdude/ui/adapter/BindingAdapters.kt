@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.findFragment
@@ -102,13 +103,13 @@ fun ViewPager2.bindPages(pages: List<Bundle>, fragmentClass: String) = adapter ?
 fun ViewPager2.bindZoom(zoom: Float, zoomFade: Float) = this.setPageTransformer { page, position ->
     if (-1 <= position && position <= 1) {
         val scaleFactor = max(zoom, 1 - abs(position))
-        val vertMargin = height * (1 - scaleFactor) / 2
-        val horzMargin = width * (1 - scaleFactor) / 2
+        val verticalMargin = height * (1 - scaleFactor) / 2
+        val horizontalMargin = width * (1 - scaleFactor) / 2
 
         page.translationX = if (position < 0) {
-            horzMargin - vertMargin / 2
+            horizontalMargin - verticalMargin / 2
         } else {
-            horzMargin + vertMargin / 2
+            horizontalMargin + verticalMargin / 2
         }
         page.scaleX = scaleFactor
         page.scaleY = scaleFactor
@@ -123,3 +124,7 @@ fun TabLayout.bindMediator(viewPager2: ViewPager2, onGetTabLabel: (Int) -> Strin
     TabLayoutMediator(this, viewPager2) { tab, position ->
         tab.text = onGetTabLabel(position)
     }.attach()
+
+@BindingAdapter("onQuery", requireAll = false)
+fun SearchView.bindQueryListener(onQuery: SearchView.OnQueryTextListener) =
+    this.setOnQueryTextListener(onQuery)
