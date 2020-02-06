@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="item"
+            name="workout"
             type="String" />
 
         <variable
@@ -20,7 +20,7 @@
         android:layout_margin="@dimen/space_xs"
         app:cardBackgroundColor="#AAAAAA"
         app:cardCornerRadius="@dimen/space_s"
-        android:onClick="@{() -> vm.startWorkout(item)}">
+        android:onClick="@{() -> vm.startWorkout(workout)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -29,12 +29,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{item}"
+                android:text="@{workout}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/exercise_delete_btn"
                 app:layout_constraintStart_toEndOf="@+id/workout_item_drag_view"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="ITEM" />
+                tools:text="WORKOUT" />
 
             <ImageView
                 android:id="@+id/exercise_delete_btn"
@@ -43,7 +43,7 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/content_workout_delete_btn"
-                android:onClick="@{() -> vm.removeItem(item)}"
+                android:onClick="@{() -> vm.removeWorkout(workout)}"
                 android:padding="@dimen/space_m"
                 android:src="@drawable/ic_delete"
                 app:layout_constraintBottom_toBottomOf="parent"

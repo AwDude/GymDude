@@ -96,7 +96,7 @@
             android:clipToPadding="false"
             android:paddingTop="@dimen/space_xs"
             android:paddingBottom="@dimen/space_xxl"
-            app:itemBinding="@{vm.itemBinding}"
+            app:itemBinding='@{"exercise"}'
             app:itemLayout="@{@layout/item_exercise}"
             app:items="@{vm.exercises}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -107,7 +107,7 @@
             app:layout_constraintTop_toBottomOf="@+id/exercise_toolbar"
             app:layout_constraintVertical_bias="0.0"
             app:viewModel="@{vm}"
-            app:viewModelBinding="@{vm.viewModelBinding}"
+            app:viewModelBinding='@{"vm"}'
             tools:listitem="@layout/item_exercise" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

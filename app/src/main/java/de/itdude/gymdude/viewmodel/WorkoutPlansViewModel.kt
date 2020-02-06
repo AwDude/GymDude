@@ -1,15 +1,10 @@
 package de.itdude.gymdude.viewmodel
 
-import de.itdude.gymdude.BR
 import de.itdude.gymdude.ui.fragment.WorkoutPlansFragmentDirections
 import de.itdude.gymdude.util.LiveDataList
 import javax.inject.Inject
 
 class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
-
-    // provides RecyclerView the fields where to put created bindings (via BindingAdapter)
-    val viewModelBinding: Int = BR.vm
-    val itemBinding: Int = BR.item
 
     val workoutPlans = LiveDataList<String>()
     val workouts = LiveDataList<String>()
@@ -23,11 +18,12 @@ class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
     }
 
     // TODO create / modify dialog
-    fun addItem() = workouts.add("Workout ${workouts.size}")
+    fun addWorkout() = workouts.add("Workout ${workouts.size}")
 
     // TODO "you sure?" dialog
-    fun removeItem(item: String) = workouts.remove(item)
+    fun removeWorkout(item: String) = workouts.remove(item)
 
-    fun startWorkout(name: String) = navigate(WorkoutPlansFragmentDirections.actionShowWorkout(name))
+    fun startWorkout(name: String) =
+        navigate(WorkoutPlansFragmentDirections.actionShowWorkout(name))
 
 }

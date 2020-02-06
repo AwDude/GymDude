@@ -17,12 +17,19 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import de.itdude.gymdude.BR
 import de.itdude.gymdude.ui.MainActivity
 import de.itdude.gymdude.ui.adapter.recyclerview.ItemMoveCallback
 import de.itdude.gymdude.ui.adapter.recyclerview.RecyclerViewAdapter
 import de.itdude.gymdude.util.LiveDataList
 import kotlin.math.abs
 import kotlin.math.max
+
+// --- HELPER FUNCTIONS ---
+
+private fun getBindingID(fieldName: String?): Int? = fieldName?.let { field ->
+    BR::class.java.getDeclaredField(field).getInt(null)
+}
 
 // --- RECYCLER VIEW ---
 
@@ -31,11 +38,12 @@ import kotlin.math.max
     "dragColor", "dragViewID", requireAll = false
 )
 fun RecyclerView.bindItems(
-    items: LiveDataList<*>, itemLayout: Int, itemBinding: Int?, viewModelBinding: Int?,
+    items: LiveDataList<*>, itemLayout: Int, itemBinding: String?, viewModelBinding: String?,
     viewModel: ViewModel?, dragByLongPress: Boolean?, dragColor: Int?, dragViewID: Int?
 ) = adapter ?: let {
     val rvAdapter = RecyclerViewAdapter(
-        this, items, itemLayout, viewModel, viewModelBinding, itemBinding
+        this, items, itemLayout, viewModel,
+        getBindingID(viewModelBinding), getBindingID(itemBinding)
     )
     if (dragByLongPress == true || dragViewID != null) {
         rvAdapter.dragColor = dragColor
@@ -49,6 +57,15 @@ fun RecyclerView.bindItems(
 
 // --- SPINNER ---
 
+@BindingAdapter("onSelect")
+fun Spinner.bindOnSelect(onSelect: (Int) -> Unit) {
+    onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onNothingSelected(parent: AdapterView<*>?) {}
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) =
+            onSelect(position)
+    }
+}
+
 @BindingAdapter("items", "selectedLayout", "dropDownLayout", "hideSelected", requireAll = false)
 fun Spinner.bindItems(
     items: List<*>, selectedLayout: Int, dropDownLayout: Int?, hideSelected: Boolean?
@@ -59,15 +76,6 @@ fun Spinner.bindItems(
         ArrayAdapter(context, selectedLayout, items)
     }.apply {
         dropDownLayout?.let { setDropDownViewResource(dropDownLayout) }
-    }
-}
-
-@BindingAdapter("onSelect")
-fun Spinner.bindOnSelect(onSelect: (Int) -> Unit) {
-    onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onNothingSelected(parent: AdapterView<*>?) {}
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) =
-            onSelect(position)
     }
 }
 

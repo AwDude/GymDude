@@ -7,7 +7,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-open class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
+open class LiveDataList<T>(private var list: MutableList<T> = ArrayList()) :
+    LiveData<MutableList<T>?>(list), MutableList<T> {
 
     interface ListObserver {
         fun notifyDataSetChanged()
@@ -21,22 +22,16 @@ open class LiveDataList<T> : LiveData<MutableList<T>?>(), MutableList<T> {
     }
 
     override val size get() = list.size
-    private var list: MutableList<T> = ArrayList()
     private var action: ((ListObserver) -> Unit)? = null
     private val listObservers = ArrayList<ListObserver>()
     private val observer = Observer<MutableList<T>?> { _ ->
         listObservers.forEach { action?.invoke(it) }
     }
 
-    init {
-        value = list
-    }
-
     public override fun setValue(value: MutableList<T>?) {
         value ?: return
-        action = { obs -> obs.notifyDataSetChanged() }
         list = value
-        notifyObserver()
+        notifyDataSetChanged()
     }
 
     fun notifyObserver() = super.setValue(list)

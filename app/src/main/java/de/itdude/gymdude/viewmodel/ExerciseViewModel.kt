@@ -1,7 +1,6 @@
 package de.itdude.gymdude.viewmodel
 
 import androidx.appcompat.widget.SearchView
-import de.itdude.gymdude.BR
 import de.itdude.gymdude.R
 import de.itdude.gymdude.model.BodyPart
 import de.itdude.gymdude.model.Exercise
@@ -15,21 +14,16 @@ import javax.inject.Inject
 
 class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQueryTextListener {
 
-    // provides RecyclerView the fields where to put created bindings (via BindingAdapter)
-    val viewModelBinding: Int = BR.vm
-    val itemBinding: Int = BR.exercise
-
     val exercises = LiveDataList<Exercise>()
-    private val filterObserver =
-        FilterRealmResultsObserver(exercises) {
-            it.name.contains(query)
-        }
+    private val filterObserver = FilterRealmResultsObserver(exercises) {
+        it.name.contains(query)
+    }
     private var query = ""
     private lateinit var results: LiveRealmResults<Exercise>
 
     // declaring the function like this makes it usable as data binding callback
     val onSort = fun(position: Int) {
-        when(position) {
+        when (position) {
             0 -> results.sort(Exercise::lastTimeDone, Sort.ASCENDING)
             1 -> results.sort(Exercise::lastTimeDone, Sort.DESCENDING)
             2 -> results.sort(Exercise::name, Sort.ASCENDING)
