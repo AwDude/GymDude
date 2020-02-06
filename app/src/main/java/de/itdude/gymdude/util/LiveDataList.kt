@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-open class LiveDataList<T>(private var list: MutableList<T> = ArrayList()) :
+open class LiveDataList<T>(protected var list: MutableList<T> = ArrayList()) :
     LiveData<MutableList<T>?>(list), MutableList<T> {
 
     interface ListObserver {
@@ -28,13 +28,13 @@ open class LiveDataList<T>(private var list: MutableList<T> = ArrayList()) :
         listObservers.forEach { action?.invoke(it) }
     }
 
-    public override fun setValue(value: MutableList<T>?) {
+    override fun setValue(value: MutableList<T>?) {
         value ?: return
         list = value
         notifyDataSetChanged()
     }
 
-    fun notifyObserver() = super.setValue(list)
+    protected fun notifyObserver() = super.setValue(list)
 
     fun observe(context: Context, listObserver: ListObserver) =
         observe(getLifecycleOwner(context), listObserver)
@@ -145,17 +145,17 @@ open class LiveDataList<T>(private var list: MutableList<T> = ArrayList()) :
 
     override fun subList(fromIndex: Int, toIndex: Int) = list.subList(fromIndex, toIndex)
 
-    protected fun notifyDataSetChanged() {
+    fun notifyDataSetChanged() {
         action = { obs -> obs.notifyDataSetChanged() }
         notifyObserver()
     }
 
-    protected fun notifyItemChanged(position: Int) {
+    fun notifyItemChanged(position: Int) {
         action = { obs -> obs.notifyItemChanged(position) }
         notifyObserver()
     }
 
-    protected fun notifyItemRangeChanged(positionStart: Int, itemCount: Int) {
+    fun notifyItemRangeChanged(positionStart: Int, itemCount: Int) {
         action = { obs -> obs.notifyItemRangeChanged(positionStart, itemCount) }
         notifyObserver()
     }
@@ -175,7 +175,6 @@ open class LiveDataList<T>(private var list: MutableList<T> = ArrayList()) :
         notifyObserver()
     }
 
-    @Suppress("SameParameterValue")
     protected fun notifyItemRangeRemoved(positionStart: Int, itemCount: Int) {
         action = { obs -> obs.notifyItemRangeRemoved(positionStart, itemCount) }
         notifyObserver()

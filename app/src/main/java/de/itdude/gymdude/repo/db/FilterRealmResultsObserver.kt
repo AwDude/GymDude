@@ -12,12 +12,12 @@ class FilterRealmResultsObserver<T : RealmObject>(
     override fun onChanged(list: MutableList<T>?) {
         var filteredItemCount = 0
 
-        list?.forEach { exercise ->
-            if (filter(exercise)) {
-                val index = resultList.indexOfFirst { it.isValid && it == exercise }
+        list?.forEach { item ->
+            if (filter(item)) {
+                val index = resultList.indexOfFirst { it.isValid && it == item }
 
                 if (index < 0) {
-                    resultList.add(filteredItemCount, exercise)
+                    resultList.add(filteredItemCount, item)
                 } else {
                     resultList.removeRange(filteredItemCount, index)
                 }

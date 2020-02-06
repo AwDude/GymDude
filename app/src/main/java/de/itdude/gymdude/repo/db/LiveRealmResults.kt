@@ -4,7 +4,8 @@ import android.util.Log
 import de.itdude.gymdude.util.LiveDataList
 import io.realm.*
 
-class LiveRealmResults<T : RealmModel>(private var results: RealmResults<T>) : LiveDataList<T>(results) {
+class LiveRealmResults<T : RealmModel>(private var results: RealmResults<T>) :
+    LiveDataList<T>(results) {
 
     private val listener =
         OrderedRealmCollectionChangeListener<RealmResults<T>> { _, changeSet ->
@@ -12,8 +13,7 @@ class LiveRealmResults<T : RealmModel>(private var results: RealmResults<T>) : L
                 return@OrderedRealmCollectionChangeListener
             }
             if (changeSet.state == OrderedCollectionChangeSet.State.ERROR) {
-                Log.e("RealmLiveDataList",
-                    "OrderedRealmCollectionChangeListener returned an error.")
+                Log.e("LiveRealmResults","Realm results are in error state.")
                 return@OrderedRealmCollectionChangeListener
             }
             if (!hasListObservers()) {

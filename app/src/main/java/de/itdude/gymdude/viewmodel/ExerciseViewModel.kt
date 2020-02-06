@@ -33,7 +33,7 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
 
     override fun onCreate() {
         results = repo.getExercises()
-        results.sort(Exercise::name.name)
+        results.sort(Exercise::name)
         results.observeForever(filterObserver)
     }
 
@@ -60,7 +60,7 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
 
     override fun onQueryTextChange(newText: String?): Boolean {
         query = newText ?: ""
-        results.notifyObserver()
+        results.notifyDataSetChanged()
         return true
     }
 
