@@ -1,11 +1,12 @@
 package de.itdude.gymdude.repo.db
 
 import android.util.Log
-import de.itdude.gymdude.util.LiveDataList
+import de.itdude.gymdude.util.LiveList
 import io.realm.*
+import kotlin.reflect.KProperty
 
-class LiveRealmResults<T : RealmModel>(private var results: RealmResults<T>) :
-    LiveDataList<T>(results) {
+@Suppress("MemberVisibilityCanBePrivate", "unused")
+class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : LiveList<T>(result) {
 
     private val listener =
         OrderedRealmCollectionChangeListener<RealmResults<T>> { _, changeSet ->
@@ -13,7 +14,7 @@ class LiveRealmResults<T : RealmModel>(private var results: RealmResults<T>) :
                 return@OrderedRealmCollectionChangeListener
             }
             if (changeSet.state == OrderedCollectionChangeSet.State.ERROR) {
-                Log.e("LiveRealmResults","Realm results are in error state.")
+                Log.e("LiveRealmResults", "Realm results are in error state.")
                 return@OrderedRealmCollectionChangeListener
             }
             if (!hasListObservers()) {
@@ -44,53 +45,44 @@ class LiveRealmResults<T : RealmModel>(private var results: RealmResults<T>) :
         }
 
     override fun onActive() = super.onActive().also {
-        if (results.isValid) {
-            results.addChangeListener(listener)
+        if (result.isValid) {
+            result.addChangeListener(listener)
         }
     }
 
     override fun onInactive() = super.onInactive().also {
-        if (results.isValid) {
-            results.removeChangeListener(listener)
-        }
+        result.removeChangeListener(listener)
     }
 
-    fun sort(fieldName: String) {
-        val temp = results.sort(fieldName).apply { addChangeListener(listener) }
-        value = temp
-        if (results.isValid) {
-            results.removeChangeListener(listener)
-        }
-        results = temp
-    }
+    fun sort(fieldName: String) = updateResult(result.sort(fieldName))
 
-    fun sort(fieldName: String, sortOrder: Sort) {
-        val temp = results.sort(fieldName, sortOrder).apply { addChangeListener(listener) }
-        value = temp
-        if (results.isValid) {
-            results.removeChangeListener(listener)
-        }
-        results = temp
-    }
+    fun sort(fieldName: String, sortOrder: Sort) = updateResult(result.sort(fieldName, sortOrder))
 
-    fun sort(fieldName1: String, sortOrder1: Sort, fieldName2: String, sortOrder2: Sort) {
-        val temp = results.sort(fieldName1, sortOrder1, fieldName2, sortOrder2).apply {
-            addChangeListener(listener)
-        }
-        value = temp
-        if (results.isValid) {
-            results.removeChangeListener(listener)
-        }
-        results = temp
-    }
+    fun sort(fieldName1: String, sortOrder1: Sort, fieldName2: String, sortOrder2: Sort) =
+        updateResult(result.sort(fieldName1, sortOrder1, fieldName2, sortOrder2))
 
-    fun sort(fieldNames: Array<String?>, sortOrders: Array<Sort?>) {
-        val temp = results.sort(fieldNames, sortOrders).apply { addChangeListener(listener) }
-        value = temp
-        if (results.isValid) {
-            results.removeChangeListener(listener)
+    fun sort(fieldNames: Array<String?>, sortOrders: Array<Sort?>) =
+        updateResult(result.sort(fieldNames, sortOrders))
+
+    fun sort(field: KProperty<*>) = sort(field.name)
+
+    fun sort(field: KProperty<*>, sortOrder: Sort) = sort(field.name, sortOrder)
+
+    fun sort(field1: KProperty<*>, sortOrder1: Sort, field2: KProperty<*>, sortOrder2: Sort)
+            = sort(field1.name, sortOrder1, field2.name, sortOrder2)
+
+    fun sort(fields: Array<KProperty<*>>, sortOrders: Array<Sort?>) =
+        sort(fields.map { it.name as String? }.toTypedArray(), sortOrders)
+
+    private fun updateResult(newResult: RealmResults<T>) {
+        if (!newResult.isValid || newResult == result) {
+            return
         }
-        results = temp
+        newResult.addChangeListener(listener)
+        setValue(newResult)
+        result.removeChangeListener(listener)
+        result = newResult
+        notifyItemRangeChanged(0, size)
     }
 
 }

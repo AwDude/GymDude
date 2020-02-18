@@ -21,7 +21,8 @@ import de.itdude.gymdude.BR
 import de.itdude.gymdude.ui.MainActivity
 import de.itdude.gymdude.ui.adapter.recyclerview.ItemMoveCallback
 import de.itdude.gymdude.ui.adapter.recyclerview.RecyclerViewAdapter
-import de.itdude.gymdude.util.LiveDataList
+import de.itdude.gymdude.util.LiveList
+import de.itdude.gymdude.util.MutableLiveList
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -34,11 +35,24 @@ private fun getBindingID(fieldName: String?): Int? = fieldName?.let { field ->
 // --- RECYCLER VIEW ---
 
 @BindingAdapter(
+    "items", "itemLayout", "itemBinding", "viewModelBinding", "viewModel", requireAll = false
+)
+fun RecyclerView.bindItems(
+    items: LiveList<*>, itemLayout: Int, itemBinding: String?,
+    viewModelBinding: String?, viewModel: ViewModel?
+) = adapter ?: let {
+    adapter = RecyclerViewAdapter(
+        this, items, itemLayout, viewModel,
+        getBindingID(viewModelBinding), getBindingID(itemBinding)
+    )
+}
+
+@BindingAdapter(
     "items", "itemLayout", "itemBinding", "viewModelBinding", "viewModel", "dragByLongPress",
     "dragColor", "dragViewID", requireAll = false
 )
 fun RecyclerView.bindItems(
-    items: LiveDataList<*>, itemLayout: Int, itemBinding: String?, viewModelBinding: String?,
+    items: MutableLiveList<*>, itemLayout: Int, itemBinding: String?, viewModelBinding: String?,
     viewModel: ViewModel?, dragByLongPress: Boolean?, dragColor: Int?, dragViewID: Int?
 ) = adapter ?: let {
     val rvAdapter = RecyclerViewAdapter(
@@ -46,8 +60,21 @@ fun RecyclerView.bindItems(
         getBindingID(viewModelBinding), getBindingID(itemBinding)
     )
     if (dragByLongPress == true || dragViewID != null) {
-        rvAdapter.dragColor = dragColor
-        val callback = ItemMoveCallback(rvAdapter, dragByLongPress ?: false)
+        val contract = object : ItemMoveCallback.ItemTouchHelperContract {
+            override fun onItemMoved(fromPosition: Int, toPosition: Int): Boolean {
+                items.move(fromPosition, toPosition)
+                return true
+            }
+
+            override fun onItemSelected(viewHolder: RecyclerView.ViewHolder) {
+                dragColor?.let { viewHolder.itemView.background.setTint(it) }
+            }
+
+            override fun onItemCleared(viewHolder: RecyclerView.ViewHolder) {
+                viewHolder.itemView.background.setTintList(null)
+            }
+        }
+        val callback = ItemMoveCallback(contract, dragByLongPress ?: false)
         val touchHelper = ItemTouchHelper(callback)
         dragViewID?.let { rvAdapter.useDragHandle(dragViewID, touchHelper) }
         touchHelper.attachToRecyclerView(this)

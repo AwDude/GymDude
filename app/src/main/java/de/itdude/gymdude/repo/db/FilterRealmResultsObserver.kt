@@ -1,11 +1,11 @@
 package de.itdude.gymdude.repo.db
 
-import androidx.lifecycle.Observer
-import de.itdude.gymdude.util.LiveDataList
+/*import androidx.lifecycle.Observer
+import de.itdude.gymdude.util.LiveList
 import io.realm.RealmObject
 
 class FilterRealmResultsObserver<T : RealmObject>(
-    private val resultList: LiveDataList<T>,
+    private val resultList: LiveList<T>,
     private val filter: (T) -> Boolean
 ) : Observer<MutableList<T>?> {
 
@@ -31,7 +31,7 @@ class FilterRealmResultsObserver<T : RealmObject>(
         }
     }
 
-}
+}*/
 
 /*{ list ->
             var filteredItemCount = 0

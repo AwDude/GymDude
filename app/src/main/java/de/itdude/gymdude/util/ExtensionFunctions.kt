@@ -28,18 +28,9 @@ fun ZonedDateTime.daysAgo() = Period.between(this.toLocalDate(), LocalDate.now()
 
 fun <T : RealmModel> RealmResults<T>.asLiveData() = LiveRealmResults(this)
 
-fun LiveRealmResults<*>.sort(field: KProperty<*>) = sort(field.name)
-fun LiveRealmResults<*>.sort(field: KProperty<*>, sortOrder: Sort) = sort(field.name, sortOrder)
-fun LiveRealmResults<*>.sort(
-    field1: KProperty<*>, sortOrder1: Sort, field2: KProperty<*>, sortOrder2: Sort
-) = sort(field1.name, sortOrder1, field2.name, sortOrder2)
-
-fun LiveRealmResults<*>.sort(fields: Array<KProperty<*>>, sortOrders: Array<Sort?>) =
-    sort(fields.map { it.name as String? }.toTypedArray(), sortOrders)
-
 // --- REALM QUERY SORT ---
 
-fun <T> RealmQuery<T>.sort(field: KProperty<*>): RealmQuery<T> = sort(field.name)
+/*fun <T> RealmQuery<T>.sort(field: KProperty<*>): RealmQuery<T> = sort(field.name)
 fun <T> RealmQuery<T>.sort(field: KProperty<*>, sortOrder: Sort): RealmQuery<T> =
     sort(field.name, sortOrder)
 
@@ -48,7 +39,7 @@ fun <T> RealmQuery<T>.sort(
 ): RealmQuery<T> = sort(field1.name, sortOrder1, field2.name, sortOrder2)
 
 fun <T> RealmQuery<T>.sort(fields: Array<KProperty<*>>, sortOrders: Array<Sort?>): RealmQuery<T> =
-    sort(fields.map { it.name as String? }.toTypedArray(), sortOrders)
+    sort(fields.map { it.name as String? }.toTypedArray(), sortOrders)*/
 
 // --- REALM QUERY EQUAL TO ---
 
