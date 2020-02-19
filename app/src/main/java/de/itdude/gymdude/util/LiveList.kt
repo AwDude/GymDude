@@ -92,42 +92,42 @@ open class LiveList<T>(private var list: List<T> = emptyList()) :
 
     override fun subList(fromIndex: Int, toIndex: Int) = list.subList(fromIndex, toIndex)
 
-    fun notifyDataSetChanged() {
+    open fun notifyDataSetChanged() {
         action = { obs -> obs.notifyDataSetChanged() }
         notifyObserver()
     }
 
-    fun notifyItemChanged(position: Int) {
+    open fun notifyItemChanged(position: Int) {
         action = { obs -> obs.notifyItemChanged(position) }
         notifyObserver()
     }
 
-    fun notifyItemRangeChanged(positionStart: Int, itemCount: Int) {
+    open fun notifyItemRangeChanged(positionStart: Int, itemCount: Int) {
         action = { obs -> obs.notifyItemRangeChanged(positionStart, itemCount) }
         notifyObserver()
     }
 
-    protected fun notifyItemInserted(position: Int) {
+    protected open fun notifyItemInserted(position: Int) {
         action = { obs -> obs.notifyItemInserted(position) }
         notifyObserver()
     }
 
-    protected fun notifyItemRangeInserted(positionStart: Int, itemCount: Int) {
+    protected open fun notifyItemRangeInserted(positionStart: Int, itemCount: Int) {
         action = { obs -> obs.notifyItemRangeInserted(positionStart, itemCount) }
         notifyObserver()
     }
 
-    protected fun notifyItemRemoved(position: Int) {
+    protected open fun notifyItemRemoved(position: Int) {
         action = { obs -> obs.notifyItemRemoved(position) }
         notifyObserver()
     }
 
-    protected fun notifyItemRangeRemoved(positionStart: Int, itemCount: Int) {
+    protected open fun notifyItemRangeRemoved(positionStart: Int, itemCount: Int) {
         action = { obs -> obs.notifyItemRangeRemoved(positionStart, itemCount) }
         notifyObserver()
     }
 
-    protected fun notifyItemMoved(fromPosition: Int, toPosition: Int) {
+    protected open fun notifyItemMoved(fromPosition: Int, toPosition: Int) {
         action = { obs -> obs.notifyItemMoved(fromPosition, toPosition) }
         notifyObserver()
     }

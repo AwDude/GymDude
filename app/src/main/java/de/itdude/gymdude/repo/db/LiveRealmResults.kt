@@ -1,12 +1,12 @@
 package de.itdude.gymdude.repo.db
 
 import android.util.Log
-import de.itdude.gymdude.util.LiveList
+import de.itdude.gymdude.util.FilterableLiveList
 import io.realm.*
 import kotlin.reflect.KProperty
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : LiveList<T>(result) {
+class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : FilterableLiveList<T>(result) {
 
     private val listener =
         OrderedRealmCollectionChangeListener<RealmResults<T>> { _, changeSet ->
@@ -21,7 +21,8 @@ class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : Li
                 notifyObserver()
                 return@OrderedRealmCollectionChangeListener
             }
-            changeSet.insertionRanges.forEach { range ->
+            notifyDataSetChanged()
+/*            changeSet.insertionRanges.forEach { range ->
                 if (range.length == 1) {
                     notifyItemInserted(range.startIndex)
                 } else {
@@ -41,7 +42,7 @@ class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : Li
                 } else {
                     notifyItemRangeRemoved(range.startIndex, range.length)
                 }
-            }
+            }*/
         }
 
     override fun onActive() = super.onActive().also {
