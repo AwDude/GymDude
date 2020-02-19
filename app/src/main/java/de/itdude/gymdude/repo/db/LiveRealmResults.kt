@@ -17,12 +17,12 @@ class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : Fi
                 Log.e("LiveRealmResults", "Realm results are in error state.")
                 return@OrderedRealmCollectionChangeListener
             }
-            if (!hasListObservers()) {
+            filterAll()
+/*            if (!hasListObservers()) {
                 notifyObserver()
                 return@OrderedRealmCollectionChangeListener
             }
-            notifyDataSetChanged()
-/*            changeSet.insertionRanges.forEach { range ->
+            changeSet.insertionRanges.forEach { range ->
                 if (range.length == 1) {
                     notifyItemInserted(range.startIndex)
                 } else {
@@ -83,7 +83,6 @@ class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : Fi
         setValue(newResult)
         result.removeChangeListener(listener)
         result = newResult
-        notifyItemRangeChanged(0, size)
     }
 
 }

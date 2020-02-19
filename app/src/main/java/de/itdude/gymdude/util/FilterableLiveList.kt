@@ -1,5 +1,6 @@
 package de.itdude.gymdude.util
 
+
 open class FilterableLiveList<T> private constructor(
     protected var filtered: MutableList<T>, protected var unfiltered: List<T>
 ) : LiveList<T>(filtered) {
@@ -42,42 +43,4 @@ open class FilterableLiveList<T> private constructor(
         super.notifyItemRangeRemoved(fromIndex, toIndex - fromIndex)
     }
 
-    override fun notifyDataSetChanged() {
-        filterAll()
-    }
-
-/*    override fun notifyItemChanged(position: Int) {
-        action = { obs -> obs.notifyItemChanged(position) }
-        notifyObserver()
-    }
-
-    override fun notifyItemRangeChanged(positionStart: Int, itemCount: Int) {
-        action = { obs -> obs.notifyItemRangeChanged(positionStart, itemCount) }
-        notifyObserver()
-    }
-
-    override fun notifyItemInserted(position: Int) {
-        action = { obs -> obs.notifyItemInserted(position) }
-        notifyObserver()
-    }
-
-    override fun notifyItemRangeInserted(positionStart: Int, itemCount: Int) {
-        action = { obs -> obs.notifyItemRangeInserted(positionStart, itemCount) }
-        notifyObserver()
-    }
-
-    override fun notifyItemRemoved(position: Int) {
-        action = { obs -> obs.notifyItemRemoved(position) }
-        notifyObserver()
-    }
-
-    override fun notifyItemRangeRemoved(positionStart: Int, itemCount: Int) {
-        action = { obs -> obs.notifyItemRangeRemoved(positionStart, itemCount) }
-        notifyObserver()
-    }
-
-    override fun notifyItemMoved(fromPosition: Int, toPosition: Int) {
-        action = { obs -> obs.notifyItemMoved(fromPosition, toPosition) }
-        notifyObserver()
-    }*/
 }

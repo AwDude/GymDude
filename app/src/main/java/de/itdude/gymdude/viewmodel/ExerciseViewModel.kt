@@ -29,7 +29,6 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
         results.sort(Exercise::name)
         results.equals = { it1, it2 -> it1.isValid && it2.isValid && it1 == it2 }
         results.filter = { it.name.contains(query) }
-        results.filterAll()
         exercises = results
     }
 
@@ -56,7 +55,6 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
 
     override fun onQueryTextChange(newText: String?): Boolean {
         query = newText ?: ""
-        //exercises.notifyDataSetChanged()
         exercises.filterAll()
         return true
     }

@@ -17,4 +17,11 @@ open class Exercise(
     fun getLastTimeDone() = ZonedDateTime(lastTimeDone)
     fun setLastTimeDone(time: ZonedDateTime) { lastTimeDone = time.ms() }
 
+    override fun toString(): String {
+        if (isValid) {
+            return name
+        }
+        return "DELETED"
+    }
+
 }
