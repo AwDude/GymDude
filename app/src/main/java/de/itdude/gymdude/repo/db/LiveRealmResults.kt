@@ -3,10 +3,15 @@ package de.itdude.gymdude.repo.db
 import android.util.Log
 import de.itdude.gymdude.util.FilterableLiveList
 import io.realm.*
+import io.realm.kotlin.isValid
 import kotlin.reflect.KProperty
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : FilterableLiveList<T>(result) {
+
+    init {
+        equals = { it1, it2 -> it1.isValid() && it1 == it2 }
+    }
 
     private val listener =
         OrderedRealmCollectionChangeListener<RealmResults<T>> { _, changeSet ->
@@ -76,7 +81,7 @@ class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : Fi
         sort(fields.map { it.name as String? }.toTypedArray(), sortOrders)
 
     private fun updateResult(newResult: RealmResults<T>) {
-        if (!newResult.isValid || newResult == result) {
+        if (!newResult.isValid) {
             return
         }
         newResult.addChangeListener(listener)

@@ -2,11 +2,11 @@ package de.itdude.gymdude.util
 
 
 open class FilterableLiveList<T> private constructor(
-    protected var filtered: MutableList<T>, protected var unfiltered: List<T>
+    private var filtered: MutableList<T>, private var unfiltered: List<T>
 ) : LiveList<T>(filtered) {
 
     var filter: ((T) -> Boolean) = { true }
-    var equals: (T, T) -> Boolean = { item1, item2 -> item1 == item2 }
+    protected var equals: (T, T) -> Boolean = { item1, item2 -> item1 == item2 }
 
     constructor(list: List<T> = emptyList()) : this(list.toMutableList(), list)
 

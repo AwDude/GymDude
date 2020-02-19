@@ -27,7 +27,6 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
     override fun onCreate() {
         val results = repo.getExercises()
         results.sort(Exercise::name)
-        results.equals = { it1, it2 -> it1.isValid && it2.isValid && it1 == it2 }
         results.filter = { it.name.contains(query) }
         exercises = results
     }
