@@ -4,7 +4,7 @@ import androidx.appcompat.widget.SearchView
 import de.itdude.gymdude.R
 import de.itdude.gymdude.model.BodyPart
 import de.itdude.gymdude.model.Exercise
-import de.itdude.gymdude.repo.db.LiveRealmResults
+import de.itdude.gymdude.repo.db.FilterableLiveRealmResults
 import de.itdude.gymdude.util.daysAgo
 import io.realm.Sort
 import javax.inject.Inject
@@ -12,7 +12,7 @@ import javax.inject.Inject
 class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQueryTextListener {
 
     private var query = ""
-    lateinit var exercises: LiveRealmResults<Exercise>
+    lateinit var exercises: FilterableLiveRealmResults<Exercise>
 
     // declaring the function like this makes it usable as data binding callback
     val onSort = fun(position: Int) {

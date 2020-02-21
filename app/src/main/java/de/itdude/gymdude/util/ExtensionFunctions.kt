@@ -3,11 +3,11 @@
 package de.itdude.gymdude.util
 
 import androidx.fragment.app.Fragment
+import de.itdude.gymdude.repo.db.FilterableLiveRealmResults
 import de.itdude.gymdude.repo.db.LiveRealmResults
 import io.realm.RealmModel
 import io.realm.RealmQuery
 import io.realm.RealmResults
-import io.realm.Sort
 import java.time.*
 import kotlin.reflect.KProperty
 
@@ -26,7 +26,8 @@ fun ZonedDateTime.daysAgo() = Period.between(this.toLocalDate(), LocalDate.now()
 
 // --- LIVE REALM RESULTS ---
 
-fun <T : RealmModel> RealmResults<T>.asLiveData() = LiveRealmResults(this)
+fun <T : RealmModel> RealmResults<T>.asFilterableLive() = FilterableLiveRealmResults(this)
+fun <T : RealmModel> RealmResults<T>.asLive() = LiveRealmResults(this)
 
 // --- REALM QUERY SORT ---
 

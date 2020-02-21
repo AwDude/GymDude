@@ -1,6 +1,7 @@
 package de.itdude.gymdude.util
 
 
+@Suppress("MemberVisibilityCanBePrivate", "unused")
 open class FilterableLiveList<T> private constructor(
     private var filtered: MutableList<T>, private var unfiltered: List<T>
 ) : LiveList<T>(filtered) {
@@ -11,7 +12,6 @@ open class FilterableLiveList<T> private constructor(
 
     constructor(list: List<T> = emptyList()) : this(list.toMutableList(), list)
 
-    @Suppress("unused")
     fun setFilter(predicate: (T) -> Boolean) {
         filterPredicate = predicate
     }
@@ -21,7 +21,6 @@ open class FilterableLiveList<T> private constructor(
         filter()
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
     fun filter() {
         var filteredItemCount = 0
         var indexModifier = 0

@@ -1,12 +1,18 @@
 package de.itdude.gymdude.repo.db
 
 import android.util.Log
-import de.itdude.gymdude.util.LiveList
+import de.itdude.gymdude.util.FilterableLiveList
 import io.realm.*
+import io.realm.kotlin.isValid
 import kotlin.reflect.KProperty
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : LiveList<T>(result) {
+class FilterableLiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) :
+    FilterableLiveList<T>(result) {
+
+    init {
+        equals = { it1, it2 -> it1.isValid() && it1 == it2 }
+    }
 
     private val listener =
         OrderedRealmCollectionChangeListener<RealmResults<T>> { _, changeSet ->
@@ -15,10 +21,6 @@ class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : Li
             }
             if (changeSet.state == OrderedCollectionChangeSet.State.ERROR) {
                 Log.e("LiveRealmResults", "Realm results are in error state.")
-                return@OrderedRealmCollectionChangeListener
-            }
-            if (!hasListObservers()) {
-                notifyDataSetChanged()
                 return@OrderedRealmCollectionChangeListener
             }
             changeSet.insertionRanges.forEach { range ->
