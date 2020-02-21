@@ -32,7 +32,7 @@ open class LiveList<T>(private var list: List<T> = emptyList()) :
         list = value
     }
 
-    protected fun notifyObserver() = super.setValue(list)
+    private fun notifyObserver() = super.setValue(list)
 
     fun observe(context: Context, listObserver: ListObserver) =
         observe(getLifecycleOwner(context), listObserver)

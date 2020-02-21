@@ -22,11 +22,6 @@ class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : Fi
                 Log.e("LiveRealmResults", "Realm results are in error state.")
                 return@OrderedRealmCollectionChangeListener
             }
-            filterAll()
-/*            if (!hasListObservers()) {
-                notifyObserver()
-                return@OrderedRealmCollectionChangeListener
-            }
             changeSet.insertionRanges.forEach { range ->
                 if (range.length == 1) {
                     notifyItemInserted(range.startIndex)
@@ -47,7 +42,7 @@ class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : Fi
                 } else {
                     notifyItemRangeRemoved(range.startIndex, range.length)
                 }
-            }*/
+            }
         }
 
     override fun onActive() = super.onActive().also {
