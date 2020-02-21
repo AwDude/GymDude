@@ -2,13 +2,13 @@ package de.itdude.gymdude.util
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
-@Suppress("MemberVisibilityCanBePrivate", "unused")
-open class LiveDataList<T>(protected var list: MutableList<T> = ArrayList()) :
-    LiveData<MutableList<T>?>(list), MutableList<T> {
+open class LiveList<T>(private var list: List<T> = emptyList()) :
+    MutableLiveData<List<T>>(list), List<T> {
 
     interface ListObserver {
         fun notifyDataSetChanged()
@@ -24,17 +24,15 @@ open class LiveDataList<T>(protected var list: MutableList<T> = ArrayList()) :
     override val size get() = list.size
     private var action: ((ListObserver) -> Unit)? = null
     private val listObservers = ArrayList<ListObserver>()
-    private val observer = Observer<MutableList<T>?> { _ ->
+    private val observer = Observer<List<T>?> { _ ->
         listObservers.forEach { action?.invoke(it) }
     }
 
-    override fun setValue(value: MutableList<T>?) {
-        value ?: return
+    override fun setValue(value: List<T>) {
         list = value
-        notifyDataSetChanged()
     }
 
-    protected fun notifyObserver() = super.setValue(list)
+    private fun notifyObserver() = super.setValue(list)
 
     fun observe(context: Context, listObserver: ListObserver) =
         observe(getLifecycleOwner(context), listObserver)
@@ -74,57 +72,6 @@ open class LiveDataList<T>(protected var list: MutableList<T> = ArrayList()) :
         return ctx
     }
 
-    fun move(fromIndex: Int, toIndex: Int) {
-        val item = list.removeAt(fromIndex)
-        list.add(toIndex, item)
-        notifyItemMoved(fromIndex, toIndex)
-    }
-
-    override fun add(element: T) = list.add(element).also {
-        notifyItemInserted(size)
-    }
-
-    override fun add(index: Int, element: T) = list.add(index, element).also {
-        notifyItemInserted(index)
-    }
-
-    override fun addAll(index: Int, elements: Collection<T>) = list.addAll(index, elements).also {
-        notifyItemRangeInserted(index, elements.size)
-    }
-
-    override fun addAll(elements: Collection<T>) = list.addAll(elements).also {
-        notifyItemRangeInserted(size, elements.size)
-    }
-
-    override fun clear() = removeRange(0, size)
-
-    override fun remove(element: T): Boolean {
-        val removeIndex = list.indexOf(element)
-        val wasRemoved = list.remove(element)
-        notifyItemRemoved(removeIndex)
-        return wasRemoved
-    }
-
-    override fun removeAll(elements: Collection<T>) = list.removeAll(elements).also {
-        notifyDataSetChanged()
-    }
-
-    fun removeRange(fromIndex: Int, toIndex: Int) = list.subList(fromIndex, toIndex).clear().also {
-        notifyItemRangeRemoved(fromIndex, toIndex - fromIndex)
-    }
-
-    override fun removeAt(index: Int) = list.removeAt(index).also {
-        notifyItemRemoved(index)
-    }
-
-    override fun retainAll(elements: Collection<T>) = list.retainAll(elements).also {
-        notifyDataSetChanged()
-    }
-
-    override fun set(index: Int, element: T) = list.set(index, element).also {
-        notifyItemChanged(index)
-    }
-
     override fun contains(element: T) = list.contains(element)
 
     override fun containsAll(elements: Collection<T>) = list.containsAll(elements)
@@ -145,42 +92,42 @@ open class LiveDataList<T>(protected var list: MutableList<T> = ArrayList()) :
 
     override fun subList(fromIndex: Int, toIndex: Int) = list.subList(fromIndex, toIndex)
 
-    fun notifyDataSetChanged() {
+    open fun notifyDataSetChanged() {
         action = { obs -> obs.notifyDataSetChanged() }
         notifyObserver()
     }
 
-    fun notifyItemChanged(position: Int) {
+    open fun notifyItemChanged(position: Int) {
         action = { obs -> obs.notifyItemChanged(position) }
         notifyObserver()
     }
 
-    fun notifyItemRangeChanged(positionStart: Int, itemCount: Int) {
+    open fun notifyItemRangeChanged(positionStart: Int, itemCount: Int) {
         action = { obs -> obs.notifyItemRangeChanged(positionStart, itemCount) }
         notifyObserver()
     }
 
-    protected fun notifyItemInserted(position: Int) {
+    protected open fun notifyItemInserted(position: Int) {
         action = { obs -> obs.notifyItemInserted(position) }
         notifyObserver()
     }
 
-    protected fun notifyItemRangeInserted(positionStart: Int, itemCount: Int) {
+    protected open fun notifyItemRangeInserted(positionStart: Int, itemCount: Int) {
         action = { obs -> obs.notifyItemRangeInserted(positionStart, itemCount) }
         notifyObserver()
     }
 
-    protected fun notifyItemRemoved(position: Int) {
+    protected open fun notifyItemRemoved(position: Int) {
         action = { obs -> obs.notifyItemRemoved(position) }
         notifyObserver()
     }
 
-    protected fun notifyItemRangeRemoved(positionStart: Int, itemCount: Int) {
+    protected open fun notifyItemRangeRemoved(positionStart: Int, itemCount: Int) {
         action = { obs -> obs.notifyItemRangeRemoved(positionStart, itemCount) }
         notifyObserver()
     }
 
-    protected fun notifyItemMoved(fromPosition: Int, toPosition: Int) {
+    protected open fun notifyItemMoved(fromPosition: Int, toPosition: Int) {
         action = { obs -> obs.notifyItemMoved(fromPosition, toPosition) }
         notifyObserver()
     }

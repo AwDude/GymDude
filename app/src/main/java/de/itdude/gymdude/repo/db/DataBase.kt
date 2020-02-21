@@ -2,7 +2,7 @@ package de.itdude.gymdude.repo.db
 
 import de.itdude.gymdude.model.BodyPart
 import de.itdude.gymdude.model.Exercise
-import de.itdude.gymdude.util.asLiveData
+import de.itdude.gymdude.util.asFilterableLive
 import de.itdude.gymdude.util.equalTo
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -28,7 +28,7 @@ class DataBase @Inject constructor(private val realm: Realm) {
         }, { _ -> onDbError() })
     }
 
-    fun getExercises() = realm.where<Exercise>().findAllAsync().asLiveData()
+    fun getExercises() = realm.where<Exercise>().findAllAsync().asFilterableLive()
 
     fun deleteExercise(exercise: Exercise, onDbError: () -> Unit) {
         val name = exercise.name

@@ -1,20 +1,17 @@
 package de.itdude.gymdude.viewmodel
 
 import de.itdude.gymdude.ui.fragment.WorkoutPlansFragmentDirections
-import de.itdude.gymdude.util.LiveDataList
+import de.itdude.gymdude.util.LiveList
+import de.itdude.gymdude.util.MutableLiveList
 import javax.inject.Inject
 
 class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
 
-    val workoutPlans = LiveDataList<String>()
-    val workouts = LiveDataList<String>()
+    val workoutPlans = LiveList(listOf("3er Split", "4er Split", "5er Split"))
+    val workouts = MutableLiveList<String>()
 
     // declaring the function like this makes it usable as data binding callback
     val onSelectPlan = fun(position: Int) {
-    }
-
-    init {
-        workoutPlans.addAll(arrayListOf("3er Split", "4er Split", "5er Split"))
     }
 
     // TODO create / modify dialog

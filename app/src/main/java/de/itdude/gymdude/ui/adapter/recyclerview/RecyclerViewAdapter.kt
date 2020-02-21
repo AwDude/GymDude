@@ -9,23 +9,21 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import de.itdude.gymdude.util.LiveDataList
+import de.itdude.gymdude.util.LiveList
 
 
 class RecyclerViewAdapter(
     recyclerView: RecyclerView,
-    private val items: LiveDataList<*>,
+    private val items: LiveList<*>,
     private val itemLayout: Int,
     private val viewModel: ViewModel?,
     private val viewModelBinding: Int?,
     private val itemBinding: Int?
-) : RecyclerView.Adapter<RecyclerViewAdapter.BindingHolder>(), LiveDataList.ListObserver,
-    ItemMoveCallback.ItemTouchHelperContract {
+) : RecyclerView.Adapter<RecyclerViewAdapter.BindingHolder>(), LiveList.ListObserver {
 
-    var dragColor: Int? = null
     private var dragViewID: Int? = null
     private var onDragRequested: ((RecyclerView.ViewHolder) -> Unit)? = null
-    private val antiViewGlitchObserver = object : LiveDataList.ListObserver {
+    private val antiViewGlitchObserver = object : LiveList.ListObserver {
         override fun notifyDataSetChanged() {}
         override fun notifyItemChanged(position: Int) {}
         override fun notifyItemRangeChanged(positionStart: Int, itemCount: Int) {}
@@ -42,7 +40,7 @@ class RecyclerViewAdapter(
 
     fun useDragHandle(dragViewID: Int, touchHelper: ItemTouchHelper) {
         this.dragViewID = dragViewID
-        onDragRequested = { viewHolder -> touchHelper.startDrag(viewHolder) }
+        onDragRequested = touchHelper::startDrag
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -85,21 +83,6 @@ class RecyclerViewAdapter(
     }
 
     override fun getItemCount() = items.size
-
-    override fun onItemMoved(fromPosition: Int, toPosition: Int): Boolean {
-        items.move(fromPosition, toPosition)
-        return true
-    }
-
-    override fun onItemSelected(viewHolder: RecyclerView.ViewHolder) {
-        dragColor?.let {
-            viewHolder.itemView.background.setTint(it)
-        }
-    }
-
-    override fun onItemCleared(viewHolder: RecyclerView.ViewHolder) {
-        viewHolder.itemView.background.setTintList(null)
-    }
 
     class BindingHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root)
 }

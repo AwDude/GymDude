@@ -3,11 +3,11 @@
 package de.itdude.gymdude.util
 
 import androidx.fragment.app.Fragment
+import de.itdude.gymdude.repo.db.FilterableLiveRealmResults
 import de.itdude.gymdude.repo.db.LiveRealmResults
 import io.realm.RealmModel
 import io.realm.RealmQuery
 import io.realm.RealmResults
-import io.realm.Sort
 import java.time.*
 import kotlin.reflect.KProperty
 
@@ -26,20 +26,12 @@ fun ZonedDateTime.daysAgo() = Period.between(this.toLocalDate(), LocalDate.now()
 
 // --- LIVE REALM RESULTS ---
 
-fun <T : RealmModel> RealmResults<T>.asLiveData() = LiveRealmResults(this)
-
-fun LiveRealmResults<*>.sort(field: KProperty<*>) = sort(field.name)
-fun LiveRealmResults<*>.sort(field: KProperty<*>, sortOrder: Sort) = sort(field.name, sortOrder)
-fun LiveRealmResults<*>.sort(
-    field1: KProperty<*>, sortOrder1: Sort, field2: KProperty<*>, sortOrder2: Sort
-) = sort(field1.name, sortOrder1, field2.name, sortOrder2)
-
-fun LiveRealmResults<*>.sort(fields: Array<KProperty<*>>, sortOrders: Array<Sort?>) =
-    sort(fields.map { it.name as String? }.toTypedArray(), sortOrders)
+fun <T : RealmModel> RealmResults<T>.asFilterableLive() = FilterableLiveRealmResults(this)
+fun <T : RealmModel> RealmResults<T>.asLive() = LiveRealmResults(this)
 
 // --- REALM QUERY SORT ---
 
-fun <T> RealmQuery<T>.sort(field: KProperty<*>): RealmQuery<T> = sort(field.name)
+/*fun <T> RealmQuery<T>.sort(field: KProperty<*>): RealmQuery<T> = sort(field.name)
 fun <T> RealmQuery<T>.sort(field: KProperty<*>, sortOrder: Sort): RealmQuery<T> =
     sort(field.name, sortOrder)
 
@@ -48,7 +40,7 @@ fun <T> RealmQuery<T>.sort(
 ): RealmQuery<T> = sort(field1.name, sortOrder1, field2.name, sortOrder2)
 
 fun <T> RealmQuery<T>.sort(fields: Array<KProperty<*>>, sortOrders: Array<Sort?>): RealmQuery<T> =
-    sort(fields.map { it.name as String? }.toTypedArray(), sortOrders)
+    sort(fields.map { it.name as String? }.toTypedArray(), sortOrders)*/
 
 // --- REALM QUERY EQUAL TO ---
 
