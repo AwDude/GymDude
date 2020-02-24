@@ -1,6 +1,9 @@
 package de.itdude.gymdude.viewmodel
 
 import androidx.appcompat.widget.SearchView
+import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import de.itdude.gymdude.R
 import de.itdude.gymdude.model.BodyPart
 import de.itdude.gymdude.model.Exercise
@@ -13,6 +16,7 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
 
     private var query = ""
     lateinit var exercises: FilterableLiveRealmResults<Exercise>
+    val isEditable = MutableLiveData(false)
 
     // declaring the function like this makes it usable as data binding callback
     val onSort = fun(position: Int) {
@@ -56,6 +60,11 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
         query = newText ?: ""
         exercises.filter()
         return true
+    }
+
+    fun toggleEditable() {
+        val value = isEditable.value ?: return
+        isEditable.value = !value
     }
 
 }

@@ -50,10 +50,24 @@
             android:layout_marginEnd="@dimen/space_m"
             android:layout_marginBottom="@dimen/space_xl"
             android:elevation="@dimen/space_s"
+            android:visibility="@{vm.isEditable ? 0 : 8}"
             android:onClick="@{() -> vm.addExercise()}"
             android:src="@drawable/ic_add"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/exercises_rv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:maxImageSize="@dimen/space_l" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/edit_exercises_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_m"
+            android:layout_marginBottom="@dimen/space_xl"
+            android:elevation="@dimen/space_s"
+            android:onClick="@{() -> vm.toggleEditable()}"
+            android:src="@{vm.isEditable ? @drawable/ic_clear : @drawable/ic_edit}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:maxImageSize="@dimen/space_l" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

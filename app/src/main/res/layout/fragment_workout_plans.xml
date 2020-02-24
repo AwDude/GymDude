@@ -17,36 +17,10 @@
         android:paddingTop="@dimen/status_bar_height"
         tools:context=".ui.fragment.WorkoutPlansFragment">
 
-        <Toolbar
+        <include
             android:id="@+id/workout_plans_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:contentInsetStart="0dp"
-            android:elevation="@dimen/space_s"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-            <Spinner
-                android:id="@+id/workout_plan_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/space_xs"
-                android:background="@color/colorPrimaryDark"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:overlapAnchor="false"
-                android:spinnerMode="dropdown"
-                app:dropDownLayout="@{@layout/spinner_dropdown}"
-                app:hideSelected="@{true}"
-                app:items="@{vm.workoutPlans}"
-                app:onSelect="@{vm.onSelectPlan}"
-                app:selectedLayout="@{@layout/spinner_selected}"
-                tools:listitem="@layout/support_simple_spinner_dropdown_item" />
-
-        </Toolbar>
+            layout="@layout/toolbar_workout_plans"
+            app:vm="@{vm}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/workout_rv"

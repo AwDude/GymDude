@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="de.itdude.gymdude.viewmodel.WorkoutPlansViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/elevation"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+        <ImageView
+            android:id="@+id/workout_plan_edit_btn"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_exercise_delete_btn"
+            android:onClick="@{() -> vm.renameWorkoutPlan()}"
+            android:padding="@dimen/space_m"
+            android:src="@drawable/ic_edit"/>
+
+        <Spinner
+            android:id="@+id/workout_plan_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/space_xs"
+            android:background="@color/colorPrimaryDark"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:overlapAnchor="false"
+            android:spinnerMode="dropdown"
+            app:dropDownLayout="@{@layout/spinner_dropdown}"
+            app:hideSelected="@{true}"
+            app:items="@{vm.workoutPlans}"
+            app:onSelect="@{vm.onSelectPlan}"
+            app:selectedLayout="@{@layout/spinner_selected}"
+            tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
+        <ImageView
+            android:id="@+id/workout_plan_add_btn"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_exercise_delete_btn"
+            android:onClick="@{() -> vm.addWorkoutPlan()}"
+            android:padding="@dimen/space_m"
+            android:src="@drawable/ic_add"/>
+
+        <ImageView
+            android:id="@+id/workout_plan_delete_btn"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_exercise_delete_btn"
+            android:onClick="@{() -> vm.deleteWorkoutPlan()}"
+            android:padding="@dimen/space_m"
+            android:src="@drawable/ic_delete"/>
+
+    </LinearLayout>
+
+</layout>

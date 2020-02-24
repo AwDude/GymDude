@@ -23,4 +23,16 @@ class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
     fun startWorkout(name: String) =
         navigate(WorkoutPlansFragmentDirections.actionShowWorkout(name))
 
+    fun addWorkoutPlan() {
+
+    }
+
+    fun deleteWorkoutPlan() {
+
+    }
+
+    fun renameWorkoutPlan() {
+
+    }
+
 }
