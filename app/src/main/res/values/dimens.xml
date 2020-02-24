@@ -16,7 +16,7 @@
     <dimen name="space_xl">64dp</dimen>
     <dimen name="space_xxl">128dp</dimen>
 
-    <dimen name="toolbar_elevation">7dp</dimen>
+    <dimen name="elevation">8dp</dimen>
     <dimen name="status_bar_height">24dp</dimen>
     <dimen name="nav_bar_height">48dp</dimen>
 </resources>

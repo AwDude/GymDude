@@ -1,5 +1,6 @@
 package de.itdude.gymdude.ui.adapter
 
+import android.content.ContextWrapper
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -170,28 +171,40 @@ fun TabLayout.bindMediator(viewPager2: ViewPager2, onGetTabLabel: (Int) -> Strin
 
 @BindingAdapter("onQuery")
 fun SearchView.bindQueryListener(onQuery: SearchView.OnQueryTextListener) =
-    this.setOnQueryTextListener(onQuery)
+    setOnQueryTextListener(onQuery)
 
-@BindingAdapter("hideOnExpand")
-fun SearchView.bindHideOnExpand(view: View) {
+@BindingAdapter("hideOnExpand", "collapsedWidth", requireAll = false)
+fun SearchView.bindHideOnExpand(view: View?, collapsedWidth: Float?) {
+    val expanded = layoutParams.width
+    val collapsed = collapsedWidth?.let { (it / context.resources.displayMetrics.density).toInt() }
+
+    if (isIconified && collapsed != null) {
+        layoutParams.width = collapsed
+    }
     setOnSearchClickListener {
-        view.visibility = View.GONE
+        view?.visibility = View.GONE
+        collapsed?.let { layoutParams.width = expanded }
     }
     setOnCloseListener {
-        view.visibility = View.VISIBLE
+        view?.visibility = View.VISIBLE
+        collapsed?.let { layoutParams.width = collapsed }
         false
     }
 }
 
 @BindingAdapter("autoCollapse")
 fun SearchView.bindAutoCollapse(autoCollapseEnabled: Boolean) {
-    val activity = context
-    if (autoCollapseEnabled && activity is MainActivity) {
-        activity.clearFocusViews.add(this)
-        setOnQueryTextFocusChangeListener { _, hasFocus ->
-            if (!hasFocus && query.isNullOrBlank()) {
-                isIconified = true
-            }
+    if (!autoCollapseEnabled) return
+
+    var activity = context
+    while (activity !is MainActivity) {
+        activity = (activity as ContextWrapper).baseContext
+    }
+
+    activity.clearFocusViews.add(this)
+    setOnQueryTextFocusChangeListener { _, hasFocus ->
+        if (!hasFocus && query.isNullOrBlank()) {
+            isIconified = true
         }
     }
 }

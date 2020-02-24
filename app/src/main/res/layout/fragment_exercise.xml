@@ -17,77 +17,10 @@
         android:paddingTop="@dimen/status_bar_height"
         tools:context=".ui.fragment.ExerciseFragment">
 
-        <Spinner
-            android:id="@+id/exercise_sort_spinner"
-            android:layout_width="@dimen/space_l"
-            android:layout_height="@dimen/space_l"
-            android:layout_marginHorizontal="@dimen/space_m"
-            android:background="@drawable/ic_sort"
-            android:contentDescription="@string/content_exercise_sort_btn"
-            android:elevation="@dimen/space_s"
-            android:entries="@array/array_exercise_sort_options"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:overlapAnchor="false"
-            android:spinnerMode="dropdown"
-            app:layout_constraintBottom_toBottomOf="@+id/exercise_toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/exercise_toolbar"
-            app:onSelect="@{vm.onSort}" />
-
-        <TextView
-            android:id="@+id/exercise_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:elevation="@dimen/space_s"
-            android:text="@string/exercises"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_size_l"
-            app:layout_constraintBottom_toBottomOf="@+id/exercise_toolbar"
-            app:layout_constraintEnd_toStartOf="@+id/exercise_search_view"
-            app:layout_constraintStart_toEndOf="@+id/exercise_sort_spinner"
-            app:layout_constraintTop_toTopOf="@+id/exercise_toolbar"
-            tools:text="@string/exercises" />
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/exercise_search_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/space_xs"
-            android:elevation="@dimen/space_s"
-            app:autoCollapse="@{true}"
-            app:closeIcon="@drawable/ic_clear"
-            app:hideOnExpand="@{exerciseLabel}"
-            app:layout_constraintBottom_toBottomOf="@+id/exercise_toolbar"
-            app:layout_constraintEnd_toStartOf="@+id/exercise_filter_spinner"
-            app:layout_constraintStart_toEndOf="@+id/exercise_label"
-            app:layout_constraintTop_toTopOf="@+id/exercise_toolbar"
-            app:onQuery="@{vm}"
-            app:queryHint="@string/exercise_search_hint"
-            app:searchIcon="@drawable/ic_search" />
-
-        <Spinner
-            android:id="@+id/exercise_filter_spinner"
-            android:layout_width="@dimen/space_l"
-            android:layout_height="@dimen/space_l"
-            android:layout_marginEnd="@dimen/space_m"
-            android:background="@drawable/ic_filter"
-            android:contentDescription="@string/content_exercise_filter_btn"
-            android:elevation="@dimen/space_s"
-            android:foreground="?android:attr/selectableItemBackground"
-            app:layout_constraintBottom_toBottomOf="@+id/exercise_toolbar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/exercise_toolbar" />
-
-        <View
+        <include
             android:id="@+id/exercise_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="@dimen/toolbar_elevation"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            layout="@layout/toolbar_exercises"
+            app:vm="@{vm}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exercises_rv"
