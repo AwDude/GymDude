@@ -14,6 +14,10 @@ import javax.inject.Singleton
 class DataBase @Inject constructor(private val realm: Realm) {
 
     fun addExercise(exercise: Exercise, onNameError: () -> Unit, onDbError: () -> Unit) {
+        if (!exercise.isValid) {
+            onDbError()
+            return
+        }
         val name = exercise.name
         val bodyPartName = exercise.bodyPart?.name
 
@@ -31,6 +35,10 @@ class DataBase @Inject constructor(private val realm: Realm) {
     fun getExercises() = realm.where<Exercise>().findAllAsync().asFilterableLive()
 
     fun deleteExercise(exercise: Exercise, onDbError: () -> Unit) {
+        if (!exercise.isValid) {
+            onDbError()
+            return
+        }
         val name = exercise.name
         realm.executeTransactionAsync({ asyncDB ->
             asyncDB.where<Exercise>().equalTo(Exercise::name, name).findAll()

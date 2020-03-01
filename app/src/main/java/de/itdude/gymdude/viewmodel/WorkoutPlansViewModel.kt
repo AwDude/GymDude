@@ -1,5 +1,6 @@
 package de.itdude.gymdude.viewmodel
 
+import androidx.databinding.ObservableBoolean
 import de.itdude.gymdude.ui.fragment.WorkoutPlansFragmentDirections
 import de.itdude.gymdude.util.LiveList
 import de.itdude.gymdude.util.MutableLiveList
@@ -9,6 +10,7 @@ class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
 
     val workoutPlans = LiveList(listOf("3er Split", "4er Split", "5er Split"))
     val workouts = MutableLiveList<String>()
+    val isEditable = ObservableBoolean(false)
 
     // declaring the function like this makes it usable as data binding callback
     val onSelectPlan = fun(position: Int) {
@@ -34,5 +36,7 @@ class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
     fun renameWorkoutPlan() {
 
     }
+
+    fun toggleEditable() = isEditable.set(!isEditable.get())
 
 }

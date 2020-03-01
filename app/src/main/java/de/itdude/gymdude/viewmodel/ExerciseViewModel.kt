@@ -2,8 +2,6 @@ package de.itdude.gymdude.viewmodel
 
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import de.itdude.gymdude.R
 import de.itdude.gymdude.model.BodyPart
 import de.itdude.gymdude.model.Exercise
@@ -16,7 +14,7 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
 
     private var query = ""
     lateinit var exercises: FilterableLiveRealmResults<Exercise>
-    val isEditable = MutableLiveData(false)
+    val isEditable = ObservableBoolean(false)
 
     // declaring the function like this makes it usable as data binding callback
     val onSort = fun(position: Int) {
@@ -40,11 +38,12 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
         repo.addExercise(newExercise) { error -> showToast(error) }
     }
 
-    fun deleteExercise(exercise: Exercise) {
-        if (exercise.isValid) {
-            repo.deleteExercise(exercise) { error -> showToast(error) }
-        }
+    fun editExercise(exercise: Exercise) {
+
     }
+
+    fun deleteExercise(exercise: Exercise) =
+        repo.deleteExercise(exercise) { error -> showToast(error) }
 
     fun lastTimeDoneText(exercise: Exercise): String =
         when (val days = exercise.getLastTimeDone()?.daysAgo()) {
@@ -62,9 +61,5 @@ class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQuery
         return true
     }
 
-    fun toggleEditable() {
-        val value = isEditable.value ?: return
-        isEditable.value = !value
-    }
-
+    fun toggleEditable() = isEditable.set(!isEditable.get())
 }

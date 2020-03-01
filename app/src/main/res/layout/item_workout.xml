@@ -26,40 +26,43 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/workout_item_drag_view"
+                style="?android:borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/content_workout_drag_btn"
+                android:padding="@dimen/space_m"
+                android:src="@drawable/ic_drag_indicator"
+                android:visibility="@{vm.isEditable ? 0 : 8}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{workout}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/exercise_delete_btn"
+                app:layout_constraintEnd_toStartOf="@+id/workout_delete_btn"
                 app:layout_constraintStart_toEndOf="@+id/workout_item_drag_view"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="WORKOUT" />
 
             <ImageView
-                android:id="@+id/exercise_delete_btn"
+                android:id="@+id/workout_delete_btn"
                 style="?android:borderlessButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/content_workout_delete_btn"
                 android:onClick="@{() -> vm.removeWorkout(workout)}"
                 android:padding="@dimen/space_m"
                 android:src="@drawable/ic_delete"
+                android:visibility="@{vm.isEditable ? 0 : 8}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/workout_item_drag_view"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/content_workout_drag_btn"
-                android:padding="@dimen/space_m"
-                android:src="@drawable/ic_drag_indicator"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
