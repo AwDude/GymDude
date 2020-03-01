@@ -11,7 +11,15 @@ import javax.inject.Singleton
 
 @Suppress("RedundantLambdaArrow")
 @Singleton
-class DataBase @Inject constructor(private val realm: Realm) {
+class DataBase @Inject constructor(realm: Realm) {
+
+    private var realm = realm
+        get() {
+            if (field.isClosed) {
+                field = Realm.getDefaultInstance()
+            }
+            return field
+        }
 
     fun addExercise(exercise: Exercise, onNameError: () -> Unit, onDbError: () -> Unit) {
         if (!exercise.isValid) {

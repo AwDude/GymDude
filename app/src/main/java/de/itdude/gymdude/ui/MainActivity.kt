@@ -42,7 +42,9 @@ class MainActivity: DaggerAppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         clearFocusViews.clear()
-        db.close()
+        if (!db.isClosed) {
+            db.close()
+        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent) = super.dispatchTouchEvent(ev).also {
