@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:contentDescription="@string/content_workout_plan_history_btn"
-            android:onClick="@{() -> vm.deleteWorkoutPlan()}"
+            android:onClick="@{() -> vm.showWorkoutPlanHistory()}"
             android:padding="@dimen/space_m"
             android:src="@drawable/ic_history"
             android:visibility="@{vm.isEditable ? 8 : 0}" />

@@ -24,6 +24,7 @@ import de.itdude.gymdude.ui.adapter.recyclerview.ItemMoveCallback
 import de.itdude.gymdude.ui.adapter.recyclerview.RecyclerViewAdapter
 import de.itdude.gymdude.util.LiveList
 import de.itdude.gymdude.util.MutableLiveList
+import java.lang.Exception
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -36,34 +37,32 @@ private fun getBindingID(fieldName: String?): Int? = fieldName?.let { field ->
 // --- RECYCLER VIEW ---
 
 @BindingAdapter(
-    "items", "itemLayout", "itemBinding", "viewModelBinding", "viewModel", requireAll = false
-)
-fun RecyclerView.bindItems(
-    items: LiveList<*>, itemLayout: Int, itemBinding: String?,
-    viewModelBinding: String?, viewModel: ViewModel?
-) = adapter ?: let {
-    adapter = RecyclerViewAdapter(
-        this, items, itemLayout, viewModel,
-        getBindingID(viewModelBinding), getBindingID(itemBinding)
-    )
-}
-
-@BindingAdapter(
     "items", "itemLayout", "itemBinding", "viewModelBinding", "viewModel", "dragByLongPress",
     "dragColor", "dragViewID", requireAll = false
 )
 fun RecyclerView.bindItems(
     items: MutableLiveList<*>, itemLayout: Int, itemBinding: String?, viewModelBinding: String?,
     viewModel: ViewModel?, dragByLongPress: Boolean?, dragColor: Int?, dragViewID: Int?
+) = bindItems(items, itemLayout, itemBinding, viewModelBinding, viewModel, dragByLongPress, dragColor, dragViewID, items::move)
+
+@BindingAdapter(
+    "items", "itemLayout", "itemBinding", "viewModelBinding", "viewModel", "dragByLongPress",
+    "dragColor", "dragViewID", "onItemMove", requireAll = false
+)
+fun RecyclerView.bindItems(
+    items: LiveList<*>, itemLayout: Int, itemBinding: String?, viewModelBinding: String?,
+    viewModel: ViewModel?, dragByLongPress: Boolean?, dragColor: Int?, dragViewID: Int?,
+    onItemMove: ((Int, Int) -> Unit)?
 ) = adapter ?: let {
     val rvAdapter = RecyclerViewAdapter(
         this, items, itemLayout, viewModel,
         getBindingID(viewModelBinding), getBindingID(itemBinding)
     )
     if (dragByLongPress == true || dragViewID != null) {
+        if (onItemMove == null) throw NullPointerException("onItemMove must not be null if dragByLongPress or dragViewID is specified!")
         val contract = object : ItemMoveCallback.ItemTouchHelperContract {
             override fun onItemMoved(fromPosition: Int, toPosition: Int): Boolean {
-                items.move(fromPosition, toPosition)
+                onItemMove(fromPosition, toPosition)
                 return true
             }
 
@@ -97,7 +96,7 @@ fun Spinner.bindOnSelect(onSelect: (Int) -> Unit) {
 @BindingAdapter("items", "selectedLayout", "dropDownLayout", "hideSelected", requireAll = false)
 fun Spinner.bindItems(
     items: List<*>, selectedLayout: Int, dropDownLayout: Int?, hideSelected: Boolean?
-) = adapter ?: let {
+) {
     adapter = if (hideSelected == true) {
         createHiddenSelectionArrayAdapter(selectedLayout, items, this)
     } else {

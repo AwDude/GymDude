@@ -8,8 +8,6 @@ open class MutableLiveList<T>(private var list: MutableList<T> = mutableListOf()
 
     @JvmName("setMutableValue")
     fun setValue(value: MutableList<T>) {
-        // TODO: check if override works
-        Log.e("MutableLiveList", "setValue")
         list = value
         notifyDataSetChanged()
     }

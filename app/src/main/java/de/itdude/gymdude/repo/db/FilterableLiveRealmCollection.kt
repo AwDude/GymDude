@@ -2,20 +2,22 @@ package de.itdude.gymdude.repo.db
 
 import android.util.Log
 import de.itdude.gymdude.util.FilterableLiveList
+import de.itdude.gymdude.util.addListener
+import de.itdude.gymdude.util.removeListener
 import io.realm.*
 import io.realm.kotlin.isValid
 import kotlin.reflect.KProperty
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-class FilterableLiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) :
-    FilterableLiveList<T>(result) {
+class FilterableLiveRealmCollection<T : RealmModel>(private var realmCollection: OrderedRealmCollection<T>) :
+    FilterableLiveList<T>(realmCollection) {
 
     init {
         equals = { it1, it2 -> it1.isValid() && it1 == it2 }
     }
 
     private val listener =
-        OrderedRealmCollectionChangeListener<RealmResults<T>> { _, changeSet ->
+        OrderedRealmCollectionChangeListener<OrderedRealmCollection<T>> { _, changeSet ->
             if (!hasActiveObservers()) {
                 return@OrderedRealmCollectionChangeListener
             }
@@ -46,25 +48,20 @@ class FilterableLiveRealmResults<T : RealmModel>(private var result: RealmResult
             }
         }
 
-    override fun onActive() = super.onActive().also {
-        if (result.isValid) {
-            result.addChangeListener(listener)
-        }
-    }
+    override fun onActive() = super.onActive().also { realmCollection.addListener(listener) }
 
-    override fun onInactive() = super.onInactive().also {
-        result.removeChangeListener(listener)
-    }
+    override fun onInactive() = super.onInactive().also { realmCollection.removeListener(listener) }
 
-    fun sort(fieldName: String) = updateResult(result.sort(fieldName))
+    fun sort(fieldName: String) = setValue(realmCollection.sort(fieldName))
 
-    fun sort(fieldName: String, sortOrder: Sort) = updateResult(result.sort(fieldName, sortOrder))
+    fun sort(fieldName: String, sortOrder: Sort) =
+        setValue(realmCollection.sort(fieldName, sortOrder))
 
     fun sort(fieldName1: String, sortOrder1: Sort, fieldName2: String, sortOrder2: Sort) =
-        updateResult(result.sort(fieldName1, sortOrder1, fieldName2, sortOrder2))
+        setValue(realmCollection.sort(fieldName1, sortOrder1, fieldName2, sortOrder2))
 
     fun sort(fieldNames: Array<String?>, sortOrders: Array<Sort?>) =
-        updateResult(result.sort(fieldNames, sortOrders))
+        setValue(realmCollection.sort(fieldNames, sortOrders))
 
     fun sort(field: KProperty<*>) = sort(field.name)
 
@@ -76,14 +73,11 @@ class FilterableLiveRealmResults<T : RealmModel>(private var result: RealmResult
     fun sort(fields: Array<KProperty<*>>, sortOrders: Array<Sort?>) =
         sort(fields.map { it.name as String? }.toTypedArray(), sortOrders)
 
-    private fun updateResult(newResult: RealmResults<T>) {
-        if (!newResult.isValid) {
-            return
-        }
-        newResult.addChangeListener(listener)
-        setValue(newResult)
-        result.removeChangeListener(listener)
-        result = newResult
+    fun setValue(newRealmCollection: OrderedRealmCollection<T>) {
+        newRealmCollection.addListener(listener)
+        super.setValue(newRealmCollection)
+        realmCollection.removeListener(listener)
+        realmCollection = newRealmCollection
     }
 
 }

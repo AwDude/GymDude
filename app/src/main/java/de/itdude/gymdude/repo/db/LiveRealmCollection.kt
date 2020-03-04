@@ -2,11 +2,14 @@ package de.itdude.gymdude.repo.db
 
 import android.util.Log
 import de.itdude.gymdude.util.LiveList
+import de.itdude.gymdude.util.addListener
+import de.itdude.gymdude.util.removeListener
 import io.realm.*
 import kotlin.reflect.KProperty
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : LiveList<T>(result) {
+class LiveRealmCollection<T : RealmModel>(private var realmCollection: OrderedRealmCollection<T>) :
+    LiveList<T>(realmCollection) {
 
     private val listener =
         OrderedRealmCollectionChangeListener<RealmResults<T>> { _, changeSet ->
@@ -44,25 +47,20 @@ class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : Li
             }
         }
 
-    override fun onActive() = super.onActive().also {
-        if (result.isValid) {
-            result.addChangeListener(listener)
-        }
-    }
+    override fun onActive() = super.onActive().also { realmCollection.addListener(listener) }
 
-    override fun onInactive() = super.onInactive().also {
-        result.removeChangeListener(listener)
-    }
+    override fun onInactive() = super.onInactive().also { realmCollection.removeListener(listener) }
 
-    fun sort(fieldName: String) = updateResult(result.sort(fieldName))
+    fun sort(fieldName: String) = setValue(realmCollection.sort(fieldName))
 
-    fun sort(fieldName: String, sortOrder: Sort) = updateResult(result.sort(fieldName, sortOrder))
+    fun sort(fieldName: String, sortOrder: Sort) =
+        setValue(realmCollection.sort(fieldName, sortOrder))
 
     fun sort(fieldName1: String, sortOrder1: Sort, fieldName2: String, sortOrder2: Sort) =
-        updateResult(result.sort(fieldName1, sortOrder1, fieldName2, sortOrder2))
+        setValue(realmCollection.sort(fieldName1, sortOrder1, fieldName2, sortOrder2))
 
     fun sort(fieldNames: Array<String?>, sortOrders: Array<Sort?>) =
-        updateResult(result.sort(fieldNames, sortOrders))
+        setValue(realmCollection.sort(fieldNames, sortOrders))
 
     fun sort(field: KProperty<*>) = sort(field.name)
 
@@ -74,14 +72,12 @@ class LiveRealmResults<T : RealmModel>(private var result: RealmResults<T>) : Li
     fun sort(fields: Array<KProperty<*>>, sortOrders: Array<Sort?>) =
         sort(fields.map { it.name as String? }.toTypedArray(), sortOrders)
 
-    private fun updateResult(newResult: RealmResults<T>) {
-        if (!newResult.isValid) {
-            return
-        }
-        newResult.addChangeListener(listener)
-        setValue(newResult)
-        result.removeChangeListener(listener)
-        result = newResult
+    fun setValue(newRealmCollection: OrderedRealmCollection<T>) {
+        newRealmCollection.addListener(listener)
+        super.setValue(newRealmCollection)
+        realmCollection.removeListener(listener)
+        realmCollection = newRealmCollection
+        notifyDataSetChanged()
     }
 
 }

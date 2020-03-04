@@ -3,11 +3,9 @@
 package de.itdude.gymdude.util
 
 import androidx.fragment.app.Fragment
-import de.itdude.gymdude.repo.db.FilterableLiveRealmResults
-import de.itdude.gymdude.repo.db.LiveRealmResults
-import io.realm.RealmModel
-import io.realm.RealmQuery
-import io.realm.RealmResults
+import de.itdude.gymdude.repo.db.FilterableLiveRealmCollection
+import de.itdude.gymdude.repo.db.LiveRealmCollection
+import io.realm.*
 import java.time.*
 import kotlin.reflect.KProperty
 
@@ -24,10 +22,30 @@ fun ZonedDateTime(ms: Long): ZonedDateTime =
 fun ZonedDateTime.ms() = this.toInstant().toEpochMilli()
 fun ZonedDateTime.daysAgo() = Period.between(this.toLocalDate(), LocalDate.now()).days
 
-// --- LIVE REALM RESULTS ---
+// --- ORDERED REALM COLLECTION ---
 
-fun <T : RealmModel> RealmResults<T>.asFilterableLive() = FilterableLiveRealmResults(this)
-fun <T : RealmModel> RealmResults<T>.asLive() = LiveRealmResults(this)
+fun <T : RealmModel> OrderedRealmCollection<T>.asFilterableLive() = FilterableLiveRealmCollection(this)
+fun <T : RealmModel> OrderedRealmCollection<T>.asLive() = LiveRealmCollection(this)
+
+@Suppress("UNCHECKED_CAST")
+fun <T : RealmModel> OrderedRealmCollection<T>.addListener(listener: OrderedRealmCollectionChangeListener<*>) {
+    if (!isManaged || !isValid) return
+    when (this) {
+        is RealmResults<T> -> addChangeListener(listener as OrderedRealmCollectionChangeListener<RealmResults<T>>)
+        is RealmList<T> -> addChangeListener(listener as OrderedRealmCollectionChangeListener<RealmList<T>>)
+        else -> throw ClassCastException("A OrderedRealmCollectionChangeListener can only be added to a OrderedRealmCollection of type RealmResults or RealmList!")
+    }
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T : RealmModel> OrderedRealmCollection<T>.removeListener(listener: OrderedRealmCollectionChangeListener<*>) {
+    if (!isManaged || !isValid) return
+    when (this) {
+        is RealmResults<T> -> removeChangeListener(listener as OrderedRealmCollectionChangeListener<RealmResults<T>>)
+        is RealmList<T> -> removeChangeListener(listener as OrderedRealmCollectionChangeListener<RealmList<T>>)
+        else -> throw ClassCastException("A OrderedRealmCollectionChangeListener can only be added to a OrderedRealmCollection of type RealmResults or RealmList!")
+    }
+}
 
 // --- REALM QUERY SORT ---
 

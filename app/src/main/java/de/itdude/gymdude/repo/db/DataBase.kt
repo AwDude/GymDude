@@ -2,7 +2,10 @@ package de.itdude.gymdude.repo.db
 
 import de.itdude.gymdude.model.BodyPart
 import de.itdude.gymdude.model.Exercise
+import de.itdude.gymdude.model.Workout
+import de.itdude.gymdude.model.WorkoutPlan
 import de.itdude.gymdude.util.asFilterableLive
+import de.itdude.gymdude.util.asLive
 import de.itdude.gymdude.util.equalTo
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -22,18 +25,14 @@ class DataBase @Inject constructor(realm: Realm) {
         }
 
     fun addExercise(exercise: Exercise, onNameError: () -> Unit, onDbError: () -> Unit) {
-        if (!exercise.isValid) {
-            onDbError()
-            return
-        }
         val name = exercise.name
         val bodyPartName = exercise.bodyPart?.name
 
-        realm.executeTransactionAsync({ asyncDB ->
-            if (asyncDB.where<Exercise>().equalTo(Exercise::name, name).findFirst() == null) {
-                asyncDB.where<BodyPart>().equalTo(BodyPart::name, bodyPartName).findFirst()
+        realm.executeTransactionAsync({ aRealm ->
+            if (aRealm.where<Exercise>().equalTo(Exercise::name, name).findFirst() == null) {
+                aRealm.where<BodyPart>().equalTo(BodyPart::name, bodyPartName).findFirst()
                     ?.let { existingBodyPart -> exercise.bodyPart = existingBodyPart }
-                asyncDB.copyToRealm(exercise)
+                aRealm.copyToRealm(exercise)
             } else {
                 onNameError()
             }
@@ -42,15 +41,45 @@ class DataBase @Inject constructor(realm: Realm) {
 
     fun getExercises() = realm.where<Exercise>().findAllAsync().asFilterableLive()
 
-    fun deleteExercise(exercise: Exercise, onDbError: () -> Unit) {
-        if (!exercise.isValid) {
+    fun deleteExercise(exercise: Exercise, onDbError: () -> Unit) =
+        if (exercise.isValid) {
+            realm.executeTransaction { exercise.deleteFromRealm() }
+        } else {
+            onDbError()
+        }
+
+    fun getWorkoutPlans() = realm.where<WorkoutPlan>().findAllAsync().asLive()
+
+    fun addWorkoutPlan(workoutPlan: WorkoutPlan, onNameError: () -> Unit, onDbError: () -> Unit) {
+        val name = workoutPlan.name
+        realm.executeTransactionAsync({ aRealm ->
+            if (aRealm.where<WorkoutPlan>().equalTo(WorkoutPlan::name, name).findFirst() == null) {
+                aRealm.copyToRealm(workoutPlan)
+            } else {
+                onNameError()
+            }
+        }, { _ -> onDbError() })
+    }
+
+    fun deleteWorkoutPlan(workoutPlan: WorkoutPlan, onDbError: () -> Unit) =
+        if (workoutPlan.isValid) {
+            realm.executeTransaction { workoutPlan.deleteFromRealm() }
+        } else {
+            onDbError()
+        }
+
+    fun addWorkout(workoutPlan: WorkoutPlan, workout: Workout, onNameError: () -> Unit, onDbError: () -> Unit) {
+        if (!workoutPlan.isValid) {
             onDbError()
             return
         }
-        val name = exercise.name
-        realm.executeTransactionAsync({ asyncDB ->
-            asyncDB.where<Exercise>().equalTo(Exercise::name, name).findAll()
-                .deleteAllFromRealm()
-        }, { _ -> onDbError() })
+        if (workoutPlan.workouts.any { it.name == workout.name }) {
+            onNameError()
+            return
+        }
+        realm.executeTransaction{ aRealm ->
+            val mWorkout = aRealm.copyToRealm(workout)
+            workoutPlan.workouts.add(mWorkout)
+        }
     }
 }

@@ -29,11 +29,12 @@
             android:clipToPadding="false"
             android:paddingTop="@dimen/space_xs"
             android:paddingBottom="@dimen/space_xxl"
+            app:onItemMove="@{vm.onMoveWorkout}"
             app:dragColor="@{@color/colorPrimary}"
             app:dragViewID="@{@id/workout_item_drag_view}"
             app:itemBinding='@{"workout"}'
             app:itemLayout="@{@layout/item_workout}"
-            app:items="@{vm.workouts}"
+            app:items="@{vm.selectedWorkouts}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -10,18 +10,15 @@ import java.time.ZonedDateTime
 open class Exercise(
     @PrimaryKey var name: String = "",
     var bodyPart: BodyPart? = null,
-    var imageUrl: String = "",
-    var lastTimeDone: Long? = null
-) : RealmObject() {
+    var imageUrl: String = ""
+): RealmObject() {
 
-    fun getLastTimeDone() = ZonedDateTime(lastTimeDone)
-    fun setLastTimeDone(time: ZonedDateTime) { lastTimeDone = time.ms() }
-
-    override fun toString(): String {
-        if (isValid) {
-            return name
+    var lastTimeDoneMs: Long? = null
+    var lastTimeDone: ZonedDateTime?
+        get() = ZonedDateTime(lastTimeDoneMs)
+        set(value) {
+            lastTimeDoneMs = value?.ms()
         }
-        return "DELETED"
-    }
 
+    override fun toString() = if (isValid) name else "DELETED"
 }
