@@ -42,4 +42,9 @@ class Repository @Inject constructor(private val resources: Resources, private v
             onError(resources.getString(R.string.error_db))
         })
 
+    fun moveWorkout(workoutPlan: WorkoutPlan, from: Int, to: Int, onError: (String) -> Unit) =
+        db.moveWorkout(workoutPlan, from, to) { onError(resources.getString(R.string.error_db)) }
+
+    fun deleteWorkout(workoutPlan: WorkoutPlan, workout: Workout, onError: (String) -> Unit) =
+        db.deleteWorkout(workoutPlan, workout) { onError(resources.getString(R.string.error_db)) }
 }

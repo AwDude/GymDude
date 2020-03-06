@@ -82,4 +82,12 @@ class DataBase @Inject constructor(realm: Realm) {
             workoutPlan.workouts.add(mWorkout)
         }
     }
+
+    fun moveWorkout(workoutPlan: WorkoutPlan, from: Int, to: Int, onDbError: () -> Unit) {
+
+    }
+
+    fun deleteWorkout(workoutPlan: WorkoutPlan, workout: Workout, onDbError: () -> Unit) {
+
+    }
 }

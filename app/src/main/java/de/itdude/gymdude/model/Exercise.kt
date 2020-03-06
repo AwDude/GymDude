@@ -11,7 +11,7 @@ open class Exercise(
     @PrimaryKey var name: String = "",
     var bodyPart: BodyPart? = null,
     var imageUrl: String = ""
-): RealmObject() {
+) : RealmObject() {
 
     var lastTimeDoneMs: Long? = null
     var lastTimeDone: ZonedDateTime?
@@ -20,5 +20,5 @@ open class Exercise(
             lastTimeDoneMs = value?.ms()
         }
 
-    override fun toString() = if (isValid) name else "DELETED"
+    override fun toString() = if (isValid) name else "INVALID"
 }

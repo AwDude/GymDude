@@ -18,9 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_xl"
         android:layout_margin="@dimen/space_xs"
+        android:onClick="@{() -> vm.startWorkout(workout)}"
         app:cardBackgroundColor="#AAAAAA"
-        app:cardCornerRadius="@dimen/space_s"
-        android:onClick="@{() -> vm.startWorkout(workout)}">
+        app:cardCornerRadius="@dimen/space_s">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{workout.toString()}"
+                android:text="@{workout.name}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/workout_delete_btn"
                 app:layout_constraintStart_toEndOf="@+id/workout_item_drag_view"

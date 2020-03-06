@@ -11,8 +11,18 @@ import kotlin.reflect.KProperty
 class LiveRealmCollection<T : RealmModel>(private var realmCollection: OrderedRealmCollection<T>) :
     LiveList<T>(realmCollection) {
 
+    private var savedSize = size
+
+    override val size: Int
+        get() = if (realmCollection.isValid) {
+            savedSize = super.size
+            super.size
+        } else {
+            savedSize
+        }
+
     private val listener =
-        OrderedRealmCollectionChangeListener<RealmResults<T>> { _, changeSet ->
+        OrderedRealmCollectionChangeListener<OrderedRealmCollection<T>> { _, changeSet ->
             if (!hasActiveObservers()) {
                 return@OrderedRealmCollectionChangeListener
             }
