@@ -5,35 +5,45 @@ import de.itdude.gymdude.model.Workout
 import de.itdude.gymdude.model.WorkoutPlan
 import de.itdude.gymdude.repo.db.LiveRealmCollection
 import de.itdude.gymdude.ui.fragment.WorkoutPlansFragmentDirections
-import io.realm.RealmList
 import javax.inject.Inject
 
 class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
 
     lateinit var workoutPlans: LiveRealmCollection<WorkoutPlan>
-    private lateinit var selectedPlan: WorkoutPlan
-    val selectedWorkouts = LiveRealmCollection<Workout>(RealmList())
-    val isEditable = ObservableBoolean(false)
+    private var selectedPlan: WorkoutPlan? = null
+    val selectedWorkouts = LiveRealmCollection<Workout>()
+    val isEditable = ObservableBoolean()
 
     // declaring the function like this makes it usable as data binding callback
-    val onSelectPlan = fun(position: Int) {
-        selectedPlan = workoutPlans[position]
-        selectedWorkouts.setValue(selectedPlan.workouts)
+    val onSelectPlan = fun(position: Int?) = if (position == null) {
+        selectedPlan = null
+        selectedWorkouts.clear()
+    } else {
+        val plan = workoutPlans[position]
+        selectedPlan = plan
+        selectedWorkouts.setValue(plan.workouts)
     }
-    val onMoveWorkout = fun(from: Int, to: Int) {
-        repo.moveWorkout(selectedPlan, from, to) { error -> showToast(error) }
+
+    val onMoveWorkout = fun(from: Int, to: Int) = selectedPlan?.let { plan ->
+        repo.moveWorkout(plan, from, to) { error -> showToast(error) }
     }
+
+    val getItemID = fun(workout: Workout) = workout.index
 
     override fun onCreate() {
         workoutPlans = repo.getWorkoutPlans()
     }
 
     // TODO create dialog
-    fun addWorkout() = repo.addWorkout(selectedPlan, Workout("Workout ${selectedWorkouts.size}"))
-    { error -> showToast(error) }
+    fun addWorkout() = selectedPlan?.let { plan ->
+        repo.addWorkout(plan, Workout("Workout ${selectedWorkouts.size}"))
+        { error -> showToast(error) }
+    }
 
     // TODO "you sure?" dialog
-    fun removeWorkout(workout: Workout) = repo.deleteWorkout(selectedPlan, workout) { error -> showToast(error) }
+    fun removeWorkout(workout: Workout) = selectedPlan?.let { plan ->
+        repo.deleteWorkout(plan, workout) { error -> showToast(error) }
+    }
 
     fun startWorkout(workout: Workout) =
         navigate(WorkoutPlansFragmentDirections.actionShowWorkout(workout.toString()))
@@ -42,11 +52,16 @@ class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
     fun addWorkoutPlan() {
         // TODO select new plan
         val newWorkoutPlan = WorkoutPlan("3er Split ${workoutPlans.size}")
-        repo.addWorkoutPlan(newWorkoutPlan) { error -> showToast(error) }
+        repo.addWorkoutPlan(newWorkoutPlan, { isEditable.set(true) }, { error -> showToast(error) })
     }
 
     // TODO "you sure?" dialog
-    fun deleteWorkoutPlan() = repo.deleteWorkoutPlan(selectedPlan) { error -> showToast(error) }
+    fun deleteWorkoutPlan() = selectedPlan?.let { plan ->
+        repo.deleteWorkoutPlan(plan, {
+            selectedWorkouts.clear()
+            if (workoutPlans.isEmpty()) isEditable.set(false)
+        }, { error -> showToast(error) })
+    }
 
     // TODO
     fun renameWorkoutPlan() {
@@ -58,5 +73,5 @@ class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
 
     }
 
-    fun toggleEditable() = isEditable.set(!isEditable.get())
+    fun toggleEditable() = isEditable.set(if (workoutPlans.isEmpty()) false else !isEditable.get())
 }

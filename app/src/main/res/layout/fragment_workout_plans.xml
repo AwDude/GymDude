@@ -35,6 +35,7 @@
             app:itemBinding='@{"workout"}'
             app:itemLayout="@{@layout/item_workout}"
             app:items="@{vm.selectedWorkouts}"
+            getItemID="@{vm.getItemID}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -53,6 +54,7 @@
             android:elevation="@dimen/space_s"
             android:onClick="@{() -> vm.toggleEditable()}"
             android:src="@{vm.isEditable ? @drawable/ic_stop_modify : @drawable/ic_modify}"
+            android:visibility="@{vm.workoutPlans.empty ? 8 : 0}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:maxImageSize="@dimen/space_l" />

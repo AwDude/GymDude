@@ -12,14 +12,19 @@ import androidx.recyclerview.widget.RecyclerView
 import de.itdude.gymdude.util.LiveList
 
 
-class RecyclerViewAdapter(
+class RecyclerViewAdapter<T>(
     recyclerView: RecyclerView,
-    private val items: LiveList<*>,
+    private val items: LiveList<T>,
     private val itemLayout: Int,
     private val viewModel: ViewModel?,
     private val viewModelBinding: Int?,
-    private val itemBinding: Int?
+    private val itemBinding: Int?,
+    private val getItemID: ((T) -> Long)?
 ) : RecyclerView.Adapter<RecyclerViewAdapter.BindingHolder>(), LiveList.ListObserver {
+
+    init {
+        if (getItemID != null) setHasStableIds(true)
+    }
 
     private var dragViewID: Int? = null
     private var onDragRequested: ((RecyclerView.ViewHolder) -> Unit)? = null
@@ -42,6 +47,9 @@ class RecyclerViewAdapter(
         this.dragViewID = dragViewID
         onDragRequested = touchHelper::startDrag
     }
+
+    override fun getItemId(position: Int) =
+        getItemID?.invoke(items[position]) ?: super.getItemId(position)
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)

@@ -9,12 +9,17 @@ import io.realm.kotlin.isValid
 import kotlin.reflect.KProperty
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-class FilterableLiveRealmCollection<T : RealmModel>(private var realmCollection: OrderedRealmCollection<T>) :
-    FilterableLiveList<T>(realmCollection) {
+class FilterableLiveRealmCollection<T : RealmModel>(
+    private var realmCollection: OrderedRealmCollection<T> = RealmList()
+) : FilterableLiveList<T>(realmCollection) {
 
-    init {
-        equals = { it1, it2 -> it1.isValid() && it1 == it2 }
-    }
+    private var savedSize = size
+
+    override val size: Int
+        get() {
+            if (realmCollection.isValid) savedSize = super.size
+            return savedSize
+        }
 
     private val listener =
         OrderedRealmCollectionChangeListener<OrderedRealmCollection<T>> { _, changeSet ->
@@ -23,6 +28,11 @@ class FilterableLiveRealmCollection<T : RealmModel>(private var realmCollection:
             }
             if (changeSet.state == OrderedCollectionChangeSet.State.ERROR) {
                 Log.e("LiveRealmResults", "Realm results are in error state.")
+                return@OrderedRealmCollectionChangeListener
+            }
+            // workaround to recognize if item was moved
+            if (changeSet.insertions.size == 1 && changeSet.deletions.size == 1) {
+                notifyItemMoved(changeSet.deletions[0], changeSet.insertions[0])
                 return@OrderedRealmCollectionChangeListener
             }
             changeSet.insertionRanges.forEach { range ->
@@ -48,9 +58,15 @@ class FilterableLiveRealmCollection<T : RealmModel>(private var realmCollection:
             }
         }
 
+    init {
+        equals = { it1, it2 -> it1.isValid() && it1 == it2 }
+    }
+
     override fun onActive() = super.onActive().also { realmCollection.addListener(listener) }
 
     override fun onInactive() = super.onInactive().also { realmCollection.removeListener(listener) }
+
+    fun clear() = setValue(RealmList())
 
     fun sort(fieldName: String) = setValue(realmCollection.sort(fieldName))
 
@@ -70,6 +86,7 @@ class FilterableLiveRealmCollection<T : RealmModel>(private var realmCollection:
     fun sort(field1: KProperty<*>, sortOrder1: Sort, field2: KProperty<*>, sortOrder2: Sort) =
         sort(field1.name, sortOrder1, field2.name, sortOrder2)
 
+    @Suppress("USELESS_CAST")
     fun sort(fields: Array<KProperty<*>>, sortOrders: Array<Sort?>) =
         sort(fields.map { it.name as String? }.toTypedArray(), sortOrders)
 

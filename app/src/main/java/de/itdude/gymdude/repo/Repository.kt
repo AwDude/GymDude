@@ -23,8 +23,8 @@ class Repository @Inject constructor(private val resources: Resources, private v
     fun deleteExercise(exercise: Exercise, onError: (String) -> Unit) =
         db.deleteExercise(exercise) { onError(resources.getString(R.string.error_db)) }
 
-    fun addWorkoutPlan(workoutPlan: WorkoutPlan, onError: (String) -> Unit) =
-        db.addWorkoutPlan(workoutPlan, {
+    fun addWorkoutPlan(workoutPlan: WorkoutPlan, onSuccess: () -> Unit, onError: (String) -> Unit) =
+        db.addWorkoutPlan(workoutPlan, onSuccess, {
             onError(resources.getString(R.string.error_name_in_use))
         }, {
             onError(resources.getString(R.string.error_db))
@@ -32,8 +32,9 @@ class Repository @Inject constructor(private val resources: Resources, private v
 
     fun getWorkoutPlans() = db.getWorkoutPlans()
 
-    fun deleteWorkoutPlan(workoutPlan: WorkoutPlan, onError: (String) -> Unit) =
-        db.deleteWorkoutPlan(workoutPlan) { onError(resources.getString(R.string.error_db)) }
+    fun deleteWorkoutPlan(
+        workoutPlan: WorkoutPlan, onSuccess: () -> Unit, onError: (String) -> Unit
+    ) = db.deleteWorkoutPlan(workoutPlan, onSuccess, { onError(resources.getString(R.string.error_db)) })
 
     fun addWorkout(workoutPlan: WorkoutPlan, workout: Workout, onError: (String) -> Unit) =
         db.addWorkout(workoutPlan, workout, {

@@ -8,17 +8,16 @@ import io.realm.*
 import kotlin.reflect.KProperty
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-class LiveRealmCollection<T : RealmModel>(private var realmCollection: OrderedRealmCollection<T>) :
-    LiveList<T>(realmCollection) {
+class LiveRealmCollection<T : RealmModel>(
+    private var realmCollection: OrderedRealmCollection<T> = RealmList()
+) : LiveList<T>(realmCollection) {
 
     private var savedSize = size
 
     override val size: Int
-        get() = if (realmCollection.isValid) {
-            savedSize = super.size
-            super.size
-        } else {
-            savedSize
+        get() {
+            if (realmCollection.isValid) savedSize = super.size
+            return savedSize
         }
 
     private val listener =
@@ -32,6 +31,11 @@ class LiveRealmCollection<T : RealmModel>(private var realmCollection: OrderedRe
             }
             if (!hasListObservers()) {
                 notifyDataSetChanged()
+                return@OrderedRealmCollectionChangeListener
+            }
+            // workaround to recognize if item was moved
+            if (changeSet.insertions.size == 1 && changeSet.deletions.size == 1) {
+                notifyItemMoved(changeSet.deletions[0], changeSet.insertions[0])
                 return@OrderedRealmCollectionChangeListener
             }
             changeSet.insertionRanges.forEach { range ->
@@ -61,6 +65,8 @@ class LiveRealmCollection<T : RealmModel>(private var realmCollection: OrderedRe
 
     override fun onInactive() = super.onInactive().also { realmCollection.removeListener(listener) }
 
+    fun clear() = setValue(RealmList())
+
     fun sort(fieldName: String) = setValue(realmCollection.sort(fieldName))
 
     fun sort(fieldName: String, sortOrder: Sort) =
@@ -79,6 +85,7 @@ class LiveRealmCollection<T : RealmModel>(private var realmCollection: OrderedRe
     fun sort(field1: KProperty<*>, sortOrder1: Sort, field2: KProperty<*>, sortOrder2: Sort) =
         sort(field1.name, sortOrder1, field2.name, sortOrder2)
 
+    @Suppress("USELESS_CAST")
     fun sort(fields: Array<KProperty<*>>, sortOrders: Array<Sort?>) =
         sort(fields.map { it.name as String? }.toTypedArray(), sortOrders)
 

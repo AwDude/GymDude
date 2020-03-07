@@ -50,7 +50,10 @@ class DataBase @Inject constructor(realm: Realm) {
 
     fun getWorkoutPlans() = realm.where<WorkoutPlan>().findAllAsync().asLive()
 
-    fun addWorkoutPlan(workoutPlan: WorkoutPlan, onNameError: () -> Unit, onDbError: () -> Unit) {
+    fun addWorkoutPlan(
+        workoutPlan: WorkoutPlan, onSuccess: () -> Unit, onNameError: () -> Unit,
+        onDbError: () -> Unit
+    ) {
         val name = workoutPlan.name
         realm.executeTransactionAsync({ aRealm ->
             if (aRealm.where<WorkoutPlan>().equalTo(WorkoutPlan::name, name).findFirst() == null) {
@@ -58,36 +61,43 @@ class DataBase @Inject constructor(realm: Realm) {
             } else {
                 onNameError()
             }
-        }, { _ -> onDbError() })
+        }, onSuccess, { _ -> onDbError() })
     }
 
-    fun deleteWorkoutPlan(workoutPlan: WorkoutPlan, onDbError: () -> Unit) =
+    fun deleteWorkoutPlan(workoutPlan: WorkoutPlan, onSuccess: () -> Unit, onDbError: () -> Unit) =
         if (workoutPlan.isValid) {
             realm.executeTransaction { workoutPlan.deleteFromRealm() }
+            onSuccess()
         } else {
             onDbError()
         }
 
-    fun addWorkout(workoutPlan: WorkoutPlan, workout: Workout, onNameError: () -> Unit, onDbError: () -> Unit) {
-        if (!workoutPlan.isValid) {
-            onDbError()
-            return
-        }
-        if (workoutPlan.workouts.any { it.name == workout.name }) {
-            onNameError()
-            return
-        }
-        realm.executeTransaction{ aRealm ->
-            val mWorkout = aRealm.copyToRealm(workout)
+    fun addWorkout(
+        workoutPlan: WorkoutPlan, workout: Workout, onNameError: () -> Unit, onDbError: () -> Unit
+    ) = when {
+        !workoutPlan.isValid -> onDbError()
+        workoutPlan.workouts.any { it.name == workout.name } -> onNameError()
+        else -> realm.executeTransaction {
+            workout.index = workoutPlan.workouts.size.toLong()
+            val mWorkout = realm.copyToRealm(workout)
             workoutPlan.workouts.add(mWorkout)
         }
     }
 
-    fun moveWorkout(workoutPlan: WorkoutPlan, from: Int, to: Int, onDbError: () -> Unit) {
+    fun moveWorkout(workoutPlan: WorkoutPlan, from: Int, to: Int, onDbError: () -> Unit) =
+        if (workoutPlan.isValid) {
+            realm.executeTransaction { workoutPlan.workouts.move(from, to) }
+        } else {
+            onDbError()
+        }
 
-    }
-
-    fun deleteWorkout(workoutPlan: WorkoutPlan, workout: Workout, onDbError: () -> Unit) {
-
-    }
+    fun deleteWorkout(workoutPlan: WorkoutPlan, workout: Workout, onDbError: () -> Unit) =
+        if (workoutPlan.isValid && workout.isValid) {
+            realm.executeTransaction {
+                workoutPlan.workouts.remove(workout)
+                workout.deleteFromRealm()
+            }
+        } else {
+            onDbError()
+        }
 }
