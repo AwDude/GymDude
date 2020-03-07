@@ -1,13 +1,16 @@
 package de.itdude.gymdude.ui.adapter
 
 import android.content.ContextWrapper
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.doOnDetach
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.findFragment
@@ -27,7 +30,12 @@ import de.itdude.gymdude.util.MutableLiveList
 import kotlin.math.abs
 import kotlin.math.max
 
-// --- HELPER FUNCTIONS ---
+
+// --- HELPER FUNCTIONS / OBJECT ---
+
+private object BindingAdapterStates {
+    var spinnerTextColor: ColorStateList? = null
+}
 
 private fun getBindingID(fieldName: String?): Int? = fieldName?.let { field ->
     BR::class.java.getDeclaredField(field).getInt(null)
@@ -90,6 +98,31 @@ fun <T> RecyclerView.bindItems(
 }
 
 // --- SPINNER ---
+
+@BindingAdapter("clickable")
+fun Spinner.bindClickable(setClickable: Boolean) {
+    this.post {
+        if (childCount > 0) {
+            val child = getChildAt(0)
+            if (child is TextView) {
+                if (BindingAdapterStates.spinnerTextColor == null) {
+                    val color = child.textColors.getColorForState(
+                        intArrayOf(android.R.attr.state_enabled),
+                        child.currentTextColor
+                    )
+                    val states = arrayOf(
+                        intArrayOf(android.R.attr.state_enabled),
+                        intArrayOf(-android.R.attr.state_enabled)
+                    )
+                    val colors = intArrayOf(color, color)
+                    BindingAdapterStates.spinnerTextColor = ColorStateList(states, colors)
+                }
+                child.setTextColor(BindingAdapterStates.spinnerTextColor)
+            }
+        }
+    }
+    isEnabled = setClickable
+}
 
 @BindingAdapter("onSelect")
 fun Spinner.bindOnSelect(onSelect: (Int?) -> Unit) {

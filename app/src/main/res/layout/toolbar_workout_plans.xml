@@ -44,6 +44,7 @@
             android:visibility="@{vm.isEditable ? 0 : 8}" />
 
         <Spinner
+            app:clickable="@{vm.workoutPlans.size() > 1}"
             android:id="@+id/workout_plan_spinner"
             android:layout_width="0dp"
             android:layout_height="match_parent"

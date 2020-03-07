@@ -50,19 +50,15 @@ class DataBase @Inject constructor(realm: Realm) {
 
     fun getWorkoutPlans() = realm.where<WorkoutPlan>().findAllAsync().asLive()
 
-    fun addWorkoutPlan(
-        workoutPlan: WorkoutPlan, onSuccess: () -> Unit, onNameError: () -> Unit,
-        onDbError: () -> Unit
-    ) {
-        val name = workoutPlan.name
-        realm.executeTransactionAsync({ aRealm ->
-            if (aRealm.where<WorkoutPlan>().equalTo(WorkoutPlan::name, name).findFirst() == null) {
-                aRealm.copyToRealm(workoutPlan)
-            } else {
-                onNameError()
-            }
-        }, onSuccess, { _ -> onDbError() })
-    }
+    fun addWorkoutPlan(workoutPlan: WorkoutPlan, onSuccess: () -> Unit, onNameError: () -> Unit) =
+        if (realm.where<WorkoutPlan>().equalTo(WorkoutPlan::name, workoutPlan.name)
+                .findFirst() == null
+        ) {
+            realm.executeTransaction { realm.copyToRealm(workoutPlan) }
+            onSuccess()
+        } else {
+            onNameError()
+        }
 
     fun deleteWorkoutPlan(workoutPlan: WorkoutPlan, onSuccess: () -> Unit, onDbError: () -> Unit) =
         if (workoutPlan.isValid) {
