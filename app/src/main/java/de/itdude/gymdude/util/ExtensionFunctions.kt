@@ -2,7 +2,10 @@
 
 package de.itdude.gymdude.util
 
+import android.content.Context
+import android.content.ContextWrapper
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import de.itdude.gymdude.repo.db.FilterableLiveRealmCollection
 import de.itdude.gymdude.repo.db.LiveRealmCollection
 import io.realm.OrderedRealmCollection
@@ -17,6 +20,16 @@ import java.time.Period
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import kotlin.reflect.KProperty
+
+// --- CONTEXT ---
+
+fun Context.getLifecycleOwner(): LifecycleOwner {
+	var context = this
+	while (context !is LifecycleOwner) {
+		context = (context as ContextWrapper).baseContext
+	}
+	return context
+}
 
 // --- FRAGMENT ---
 

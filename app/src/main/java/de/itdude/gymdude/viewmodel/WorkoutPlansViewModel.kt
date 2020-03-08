@@ -1,6 +1,8 @@
 package de.itdude.gymdude.viewmodel
 
 import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import de.itdude.gymdude.model.Workout
 import de.itdude.gymdude.model.WorkoutPlan
 import de.itdude.gymdude.repo.db.LiveRealmCollection
@@ -9,27 +11,33 @@ import javax.inject.Inject
 
 class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
 
-	private var selectedPlan: WorkoutPlan? = null
 	lateinit var workoutPlans: LiveRealmCollection<WorkoutPlan>
+	val selectedPlanIndex = MutableLiveData<Int>()
 	val selectedWorkouts = LiveRealmCollection<Workout>()
 	val isEditable = ObservableBoolean()
 
-	// Data binding callbacks
-	val onSelectPlan = fun(position: Int?) = if (position == null) {
-		selectedPlan = null
-		selectedWorkouts.clear()
-	} else {
-		val plan = workoutPlans[position]
-		selectedPlan = plan
-		selectedWorkouts.setValue(plan.workouts)
+	private val selectedPlan: WorkoutPlan?
+		get() = selectedPlanIndex.value?.let { index -> if (index >= 0) workoutPlans[index] else null }
+
+	private val selectedPlanIndexObserver = Observer<Int> {
+		selectedPlan?.let { plan -> selectedWorkouts.setValue(plan.workouts) } ?: selectedWorkouts.clear()
 	}
+
+	// Data binding callback
 	val onMoveWorkout = fun(from: Int, to: Int) = selectedPlan?.let { plan ->
 		repo.moveWorkout(plan, from, to) { error -> showToast(error) }
 	}
+
+	// Data binding callback
 	val getItemID = fun(workout: Workout) = workout.index
 
 	override fun onCreate() {
 		workoutPlans = repo.getWorkoutPlans()
+		selectedPlanIndex.observeForever(selectedPlanIndexObserver)
+	}
+
+	override fun onCleared() = super.onCleared().also {
+		selectedPlanIndex.removeObserver(selectedPlanIndexObserver)
 	}
 
 	// TODO create dialog
@@ -42,19 +50,22 @@ class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
 		repo.deleteWorkout(plan, workout) { error -> showToast(error) }
 	}
 
-	fun startWorkout(workout: Workout) = navigate(WorkoutPlansFragmentDirections.actionShowWorkout(workout.toString()))
+	fun startWorkout(workout: Workout) = navigate(WorkoutPlansFragmentDirections.actionShowWorkout(workout.name))
 
 	// TODO create dialog
 	fun addWorkoutPlan() {
 		// TODO select new plan
 		val newWorkoutPlan = WorkoutPlan("3er Split ${workoutPlans.size}")
-		repo.addWorkoutPlan(newWorkoutPlan, { isEditable.set(true) }, { error -> showToast(error) })
+		repo.addWorkoutPlan(newWorkoutPlan, {
+			selectedPlanIndex.value = workoutPlans.size - 1
+			isEditable.set(true)
+		}, { error -> showToast(error) })
 	}
 
 	// TODO "you sure?" dialog
 	fun deleteWorkoutPlan() = selectedPlan?.let { plan ->
 		repo.deleteWorkoutPlan(plan, {
-			selectedWorkouts.clear()
+			selectedPlanIndex.value = if (workoutPlans.isEmpty()) -1 else 0
 			if (workoutPlans.isEmpty()) isEditable.set(false)
 		}, { error -> showToast(error) })
 	}
@@ -70,4 +81,5 @@ class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
 	}
 
 	fun toggleEditable() = isEditable.set(if (workoutPlans.isEmpty()) false else !isEditable.get())
+
 }

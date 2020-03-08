@@ -3,14 +3,10 @@
 package de.itdude.gymdude.ui.adapter
 
 import android.content.ContextWrapper
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
@@ -32,10 +28,6 @@ import kotlin.math.abs
 import kotlin.math.max
 
 // --- HELPER FUNCTIONS / OBJECT ---
-
-private object BindingAdapterStates {
-	var spinnerTextColor: ColorStateList? = null
-}
 
 private fun getBindingID(fieldName: String?): Int? = fieldName?.let { field ->
 	BR::class.java.getDeclaredField(field).getInt(null)
@@ -84,7 +76,7 @@ fun <T> RecyclerView.bindItems(items: LiveList<T>,
 							   dragColor: Int?,
 							   dragViewID: Int?,
 							   onItemMove: ((Int, Int) -> Unit)?,
-							   getItemID: ((T) -> Long)?) = adapter ?: let {
+							   getItemID: ((T) -> Long)?) = adapter ?: run {
 	val rvAdapter =
 		RecyclerViewAdapter(this, items, itemLayout, viewModel, getBindingID(viewModelBinding), getBindingID(itemBinding), getItemID)
 	if (dragByLongPress == true || dragViewID != null) {
@@ -98,7 +90,7 @@ fun <T> RecyclerView.bindItems(items: LiveList<T>,
 			}
 
 			override fun onItemSelected(viewHolder: RecyclerView.ViewHolder) {
-				dragColor?.let { viewHolder.itemView.background.setTint(it) }
+				dragColor?.let { color -> viewHolder.itemView.background.setTint(color) }
 			}
 
 			override fun onItemCleared(viewHolder: RecyclerView.ViewHolder) {
@@ -107,32 +99,13 @@ fun <T> RecyclerView.bindItems(items: LiveList<T>,
 		}
 		val callback = ItemMoveCallback(contract, dragByLongPress ?: false)
 		val touchHelper = ItemTouchHelper(callback)
-		dragViewID?.let { rvAdapter.useDragHandle(dragViewID, touchHelper) }
+		dragViewID?.run { rvAdapter.useDragHandle(dragViewID, touchHelper) }
 		touchHelper.attachToRecyclerView(this)
 	}
 	adapter = rvAdapter
 }
 
 // --- SPINNER ---
-
-@BindingAdapter("clickable")
-fun Spinner.bindClickable(setClickable: Boolean) {
-	this.post {
-		if (childCount > 0) {
-			val child = getChildAt(0)
-			if (child is TextView) {
-				if (BindingAdapterStates.spinnerTextColor == null) {
-					val color = child.textColors.getColorForState(intArrayOf(android.R.attr.state_enabled), child.currentTextColor)
-					val states = arrayOf(intArrayOf(android.R.attr.state_enabled), intArrayOf(-android.R.attr.state_enabled))
-					val colors = intArrayOf(color, color)
-					BindingAdapterStates.spinnerTextColor = ColorStateList(states, colors)
-				}
-				child.setTextColor(BindingAdapterStates.spinnerTextColor)
-			}
-		}
-	}
-	isEnabled = setClickable
-}
 
 @BindingAdapter("onSelect")
 fun Spinner.bindOnSelect(onSelect: (Int?) -> Unit) {
@@ -143,46 +116,22 @@ fun Spinner.bindOnSelect(onSelect: (Int?) -> Unit) {
 }
 
 @BindingAdapter("items", "selectedLayout", "dropDownLayout", "hideSelected", requireAll = false)
-fun Spinner.bindItems(items: List<*>, selectedLayout: Int, dropDownLayout: Int?, hideSelected: Boolean?) {
-	adapter = if (hideSelected == true) {
-		createHiddenSelectionArrayAdapter(selectedLayout, items, this)
-	} else {
-		ArrayAdapter(context, selectedLayout, items)
-	}.apply {
-		dropDownLayout?.let { setDropDownViewResource(dropDownLayout) }
+fun Spinner.bindItems(items: LiveList<*>, selectedLayout: Int?, dropDownLayout: Int?, hideSelected: Boolean?) = adapter ?: run {
+	adapter = SpinnerAdapter(this, items, selectedLayout, hideSelected == true).apply {
+		dropDownLayout?.run { setDropDownViewResource(dropDownLayout) }
 	}
 }
-
-private fun createHiddenSelectionArrayAdapter(selectedLayout: Int, items: List<*>, spinner: Spinner) =
-	object : ArrayAdapter<Any>(spinner.context, selectedLayout, items) {
-
-		private val hideParams = ViewGroup.LayoutParams(-1, 1)
-		private val showParams = ViewGroup.LayoutParams(-1, -2)
-
-		override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup) =
-			super.getDropDownView(position, convertView, parent).apply {
-				if (position == spinner.selectedItemPosition) {
-					convertView?.layoutParams = hideParams
-					convertView?.visibility = View.GONE
-					layoutParams = hideParams
-					visibility = View.GONE
-				} else if (convertView != null && convertView.visibility == View.GONE) {
-					convertView.visibility = View.VISIBLE
-					convertView.layoutParams = showParams
-				}
-			}
-	}
 
 // --- VIEW PAGER ---
 
 @BindingAdapter("pageDataList", "fragmentClass", "getBundle", requireAll = false)
-fun <T> ViewPager2.bindPages(pageDataList: List<T>, fragmentClass: String, getBundle: ((T) -> Bundle?)?) = adapter ?: let {
+fun <T> ViewPager2.bindPages(pageDataList: List<T>, fragmentClass: String, getBundle: ((T) -> Bundle?)?) = adapter ?: run {
 	@Suppress("UNCHECKED_CAST") val clazz = Class.forName(fragmentClass) as Class<Fragment>
 
 	adapter = object : FragmentStateAdapter(findFragment<Fragment>()) {
 		override fun getItemCount() = pageDataList.size
 		override fun createFragment(position: Int) = clazz.newInstance().apply {
-			getBundle?.let { arguments = getBundle(pageDataList[position]) }
+			getBundle?.run { arguments = getBundle(pageDataList[position]) }
 		}
 	}
 }
@@ -227,11 +176,11 @@ fun SearchView.bindHideOnExpand(view: View?, collapsedWidth: Float?) {
 	}
 	setOnSearchClickListener {
 		view?.visibility = View.GONE
-		collapsed?.let { layoutParams.width = expanded }
+		collapsed?.run { layoutParams.width = expanded }
 	}
 	setOnCloseListener {
 		view?.visibility = View.VISIBLE
-		collapsed?.let { layoutParams.width = collapsed }
+		collapsed?.run { layoutParams.width = collapsed }
 		false
 	}
 }

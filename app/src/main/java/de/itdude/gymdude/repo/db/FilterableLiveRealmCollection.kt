@@ -17,18 +17,10 @@ import kotlin.reflect.KProperty
 class FilterableLiveRealmCollection<T : RealmModel>(private var realmCollection: OrderedRealmCollection<T> = RealmList()) :
 	FilterableLiveList<T>(realmCollection) {
 
-	private var savedSize = size
-
 	override val size: Int
-		get() {
-			if (realmCollection.isValid) savedSize = super.size
-			return savedSize
-		}
+		get() = if (realmCollection.isValid) super.size else 0
 
 	private val listener = OrderedRealmCollectionChangeListener<OrderedRealmCollection<T>> { _, changeSet ->
-		if (!hasActiveObservers()) {
-			return@OrderedRealmCollectionChangeListener
-		}
 		if (changeSet.state == OrderedCollectionChangeSet.State.ERROR) {
 			Log.e("LiveRealmResults", "Realm results are in error state.")
 			return@OrderedRealmCollectionChangeListener

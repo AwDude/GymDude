@@ -43,8 +43,8 @@
 			android:src="@drawable/ic_edit"
 			android:visibility="@{vm.isEditable ? 0 : 8}" />
 
-		<Spinner
-			app:clickable="@{vm.workoutPlans.size() > 1}"
+		<!--suppress AndroidUnknownAttribute -->
+		<de.itdude.gymdude.ui.view.AutoLockingSpinner
 			android:id="@+id/workout_plan_spinner"
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
@@ -53,11 +53,11 @@
 			android:background="@color/colorPrimaryDark"
 			android:foreground="?android:attr/selectableItemBackground"
 			android:overlapAnchor="false"
+			android:selectedItemPosition="@={vm.selectedPlanIndex}"
 			android:spinnerMode="dropdown"
 			app:dropDownLayout="@{@layout/spinner_dropdown}"
 			app:hideSelected="@{true}"
 			app:items="@{vm.workoutPlans}"
-			app:onSelect="@{vm.onSelectPlan}"
 			app:selectedLayout="@{@layout/spinner_selected}"
 			tools:listitem="@layout/support_simple_spinner_dropdown_item" />
 

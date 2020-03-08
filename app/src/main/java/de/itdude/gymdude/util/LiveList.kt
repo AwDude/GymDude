@@ -30,7 +30,7 @@ open class LiveList<T>(private var list: List<T> = emptyList()) : MutableLiveDat
 
 	private fun notifyObserver() = super.setValue(list)
 
-	fun observe(context: Context, listObserver: ListObserver) = observe(getLifecycleOwner(context), listObserver)
+	fun observe(context: Context, listObserver: ListObserver) = observe(context.getLifecycleOwner(), listObserver)
 
 	@Synchronized
 	fun observe(lifecycleOwner: LifecycleOwner, listObserver: ListObserver) {
@@ -58,14 +58,6 @@ open class LiveList<T>(private var list: List<T> = emptyList()) : MutableLiveDat
 
 	@Synchronized
 	fun hasListObservers() = listObservers.isNotEmpty()
-
-	private fun getLifecycleOwner(context: Context): LifecycleOwner {
-		var ctx = context
-		while (ctx !is LifecycleOwner) {
-			ctx = (ctx as ContextWrapper).baseContext
-		}
-		return ctx
-	}
 
 	override fun contains(element: T) = list.contains(element)
 
