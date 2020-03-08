@@ -87,3 +87,7 @@ fun <T> RealmQuery<T>.equalTo(field: KProperty<ByteArray?>, value: ByteArray?): 
 fun <T> RealmQuery<T>.equalTo(field: KProperty<Short?>, value: Short?): RealmQuery<T> = equalTo(field.name, value)
 
 fun <T> RealmQuery<T>.equalTo(field: KProperty<Long?>, value: Long?): RealmQuery<T> = equalTo(field.name, value)
+
+// --- REALM QUERY MAX ---
+
+fun <T> RealmQuery<T>.max(field: KProperty<*>) = max(field.name)

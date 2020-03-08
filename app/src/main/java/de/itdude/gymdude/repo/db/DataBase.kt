@@ -7,6 +7,7 @@ import de.itdude.gymdude.model.WorkoutPlan
 import de.itdude.gymdude.util.asFilterableLive
 import de.itdude.gymdude.util.asLive
 import de.itdude.gymdude.util.equalTo
+import de.itdude.gymdude.util.max
 import io.realm.Realm
 import io.realm.kotlin.where
 import javax.inject.Inject
@@ -67,7 +68,7 @@ class DataBase @Inject constructor(realm: Realm) {
 		!workoutPlan.isValid -> onDbError()
 		workoutPlan.workouts.any { it.name == workout.name } -> onNameError()
 		else -> realm.executeTransaction {
-			workout.index = workoutPlan.workouts.size.toLong()
+			workout.index = (realm.where<Workout>().max(Workout::index)?.toLong() ?: 0) + 1
 			val mWorkout = realm.copyToRealm(workout)
 			workoutPlan.workouts.add(mWorkout)
 		}
