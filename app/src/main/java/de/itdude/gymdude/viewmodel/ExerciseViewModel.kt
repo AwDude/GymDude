@@ -12,57 +12,56 @@ import javax.inject.Inject
 
 class ExerciseViewModel @Inject constructor() : AViewModel(), SearchView.OnQueryTextListener {
 
-    private var query = ""
-    lateinit var exercises: FilterableLiveRealmCollection<Exercise>
-    val isEditable = ObservableBoolean(false)
+	private var query = ""
+	lateinit var exercises: FilterableLiveRealmCollection<Exercise>
+	val isEditable = ObservableBoolean(false)
 
-    // declaring the function like this makes it usable as data binding callback
-    val onSort = fun(position: Int) {
-        when (position) {
-            0 -> exercises.sort(Exercise::lastTimeDoneMs, Sort.ASCENDING)
-            1 -> exercises.sort(Exercise::lastTimeDoneMs, Sort.DESCENDING)
-            2 -> exercises.sort(Exercise::name, Sort.ASCENDING)
-            3 -> exercises.sort(Exercise::name, Sort.DESCENDING)
-        }
-    }
+	// Data binding callback
+	val onSort = fun(position: Int) {
+		when (position) {
+			0 -> exercises.sort(Exercise::lastTimeDoneMs, Sort.ASCENDING)
+			1 -> exercises.sort(Exercise::lastTimeDoneMs, Sort.DESCENDING)
+			2 -> exercises.sort(Exercise::name, Sort.ASCENDING)
+			3 -> exercises.sort(Exercise::name, Sort.DESCENDING)
+		}
+	}
 
-    override fun onCreate() {
-        val results = repo.getExercises()
-        results.sort(Exercise::name)
-        results.setFilter { it.name.contains(query) }
-        exercises = results
-    }
+	override fun onCreate() {
+		val results = repo.getExercises()
+		results.sort(Exercise::name)
+		results.setFilter { it.name.contains(query) }
+		exercises = results
+	}
 
-    // TODO create dialog
-    fun addExercise() {
-        val newExercise = Exercise("Bankdrücken ${exercises.size}", BodyPart("Brust"))
-        repo.addExercise(newExercise) { error -> showToast(error) }
-    }
+	// TODO create dialog
+	fun addExercise() {
+		val newExercise = Exercise("Bankdrücken ${exercises.size}", BodyPart("Brust"))
+		repo.addExercise(newExercise) { error -> showToast(error) }
+	}
 
-    // TODO modify dialog
-    fun editExercise(exercise: Exercise) {
+	// TODO modify dialog
+	fun editExercise(exercise: Exercise) {
 
-    }
+	}
 
-    // TODO "you sure?" dialog
-    fun deleteExercise(exercise: Exercise) =
-        repo.deleteExercise(exercise) { error -> showToast(error) }
+	// TODO "you sure?" dialog
+	fun deleteExercise(exercise: Exercise) = repo.deleteExercise(exercise) { error -> showToast(error) }
 
-    fun lastTimeDoneText(exercise: Exercise): String =
-        when (val days = exercise.lastTimeDone?.daysAgo()) {
-            null -> resources.getString(R.string.never_text)
-            0 -> resources.getString(R.string.today_text)
-            1 -> resources.getString(R.string.yesterday_text)
-            else -> resources.getString(R.string.days_ago_text, days.toString())
-        }
+	fun lastTimeDoneText(exercise: Exercise): String = when (val days = exercise.lastTimeDone?.daysAgo()) {
+		null -> resources.getString(R.string.never_text)
+		0 -> resources.getString(R.string.today_text)
+		1 -> resources.getString(R.string.yesterday_text)
+		else -> resources.getString(R.string.days_ago_text, days.toString())
+	}
 
-    override fun onQueryTextSubmit(query: String?) = true
+	override fun onQueryTextSubmit(query: String?) = true
 
-    override fun onQueryTextChange(newText: String?): Boolean {
-        query = newText ?: ""
-        exercises.filter()
-        return true
-    }
+	override fun onQueryTextChange(newText: String?): Boolean {
+		query = newText ?: ""
+		exercises.filter()
+		return true
+	}
 
-    fun toggleEditable() = isEditable.set(!isEditable.get())
+	fun toggleEditable() = isEditable.set(!isEditable.get())
+
 }

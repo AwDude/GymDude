@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+	<data>
 
-        <variable
-            name="vm"
-            type="de.itdude.gymdude.viewmodel.WorkoutPlansViewModel" />
+		<variable
+			name="vm"
+			type="de.itdude.gymdude.viewmodel.WorkoutPlansViewModel" />
 
-    </data>
+	</data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/status_bar_height"
-        tools:context=".ui.fragment.WorkoutPlansFragment">
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:paddingTop="@dimen/status_bar_height"
+		tools:context=".ui.fragment.WorkoutPlansFragment">
 
-        <include
-            android:id="@+id/workout_plans_toolbar"
-            layout="@layout/toolbar_workout_plans"
-            app:vm="@{vm}" />
+		<include
+			android:id="@+id/workout_plans_toolbar"
+			layout="@layout/toolbar_workout_plans"
+			app:vm="@{vm}" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/workout_rv"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:clipToPadding="false"
-            android:paddingTop="@dimen/space_xs"
-            android:paddingBottom="@dimen/space_xxl"
-            app:onItemMove="@{vm.onMoveWorkout}"
-            app:dragColor="@{@color/colorPrimary}"
-            app:dragViewID="@{@id/workout_item_drag_view}"
-            app:itemBinding='@{"workout"}'
-            app:itemLayout="@{@layout/item_workout}"
-            app:items="@{vm.selectedWorkouts}"
-            getItemID="@{vm.getItemID}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/workout_plans_toolbar"
-            app:viewModel="@{vm}"
-            app:viewModelBinding='@{"vm"}'
-            tools:listitem="@layout/item_workout" />
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/workout_rv"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:clipToPadding="false"
+			android:paddingTop="@dimen/space_xs"
+			android:paddingBottom="@dimen/space_xxl"
+			app:onItemMove="@{vm.onMoveWorkout}"
+			app:dragColor="@{@color/colorPrimary}"
+			app:dragViewID="@{@id/workout_item_drag_view}"
+			app:itemBinding='@{"workout"}'
+			app:itemLayout="@{@layout/item_workout}"
+			app:items="@{vm.selectedWorkouts}"
+			getItemID="@{vm.getItemID}"
+			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/workout_plans_toolbar"
+			app:viewModel="@{vm}"
+			app:viewModelBinding='@{"vm"}'
+			tools:listitem="@layout/item_workout" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/edit_workouts_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_m"
-            android:layout_marginBottom="@dimen/space_xl"
-            android:elevation="@dimen/space_s"
-            android:onClick="@{() -> vm.toggleEditable()}"
-            android:src="@{vm.isEditable ? @drawable/ic_stop_modify : @drawable/ic_modify}"
-            android:visibility="@{vm.workoutPlans.empty ? 8 : 0}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:maxImageSize="@dimen/space_l" />
+		<com.google.android.material.floatingactionbutton.FloatingActionButton
+			android:id="@+id/edit_workouts_btn"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/space_m"
+			android:layout_marginBottom="@dimen/space_xl"
+			android:elevation="@dimen/space_s"
+			android:onClick="@{() -> vm.toggleEditable()}"
+			android:src="@{vm.isEditable ? @drawable/ic_stop_modify : @drawable/ic_modify}"
+			android:visibility="@{vm.workoutPlans.empty ? 8 : 0}"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:maxImageSize="@dimen/space_l" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_workout_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/space_m"
-            android:layout_marginBottom="@dimen/space_xl"
-            android:elevation="@dimen/space_s"
-            android:visibility="@{vm.isEditable ? 0 : 8}"
-            android:onClick="@{() -> vm.addWorkout()}"
-            android:src="@drawable/ic_add"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:maxImageSize="@dimen/space_l" />
+		<com.google.android.material.floatingactionbutton.FloatingActionButton
+			android:id="@+id/add_workout_btn"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/space_m"
+			android:layout_marginBottom="@dimen/space_xl"
+			android:elevation="@dimen/space_s"
+			android:visibility="@{vm.isEditable ? 0 : 8}"
+			android:onClick="@{() -> vm.addWorkout()}"
+			android:src="@drawable/ic_add"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:maxImageSize="@dimen/space_l" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

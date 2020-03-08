@@ -7,8 +7,8 @@ import de.itdude.gymdude.viewmodel.MenuViewModel
 
 class MenuFragment : AFragment<MenuViewModel, FragmentMenuBinding>() {
 
-    override fun getViewModelClass() = MenuViewModel::class
-    override fun getLayoutID() = R.layout.fragment_menu
-    override fun getViewModelBindingID() = BR.vm
+	override fun getViewModelClass() = MenuViewModel::class
+	override fun getLayoutID() = R.layout.fragment_menu
+	override fun getViewModelBindingID() = BR.vm
 
 }

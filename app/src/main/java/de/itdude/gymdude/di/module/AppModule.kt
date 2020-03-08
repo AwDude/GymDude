@@ -10,12 +10,12 @@ import javax.inject.Singleton
 @Module
 class AppModule {
 
-    @Provides
-    @Singleton
-    fun provideRealm(): Realm = Realm.getDefaultInstance()
+	@Provides
+	@Singleton
+	fun provideRealm(): Realm = Realm.getDefaultInstance()
 
-    @Provides
-    @Singleton
-    fun provideResources(application: Application): Resources = application.resources
+	@Provides
+	@Singleton
+	fun provideResources(application: Application): Resources = application.resources
 
 }

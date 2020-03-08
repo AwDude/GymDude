@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- TEXT SIZES -->
+	<!-- TEXT SIZES -->
 
-    <dimen name="text_size_s">12sp</dimen>
-    <dimen name="text_size_m">16sp</dimen>
-    <dimen name="text_size_l">24sp</dimen>
+	<dimen name="text_size_s">12sp</dimen>
+	<dimen name="text_size_m">16sp</dimen>
+	<dimen name="text_size_l">24sp</dimen>
 
-    <!-- SPACES -->
+	<!-- SPACES -->
 
-    <dimen name="space_xs">4dp</dimen>
-    <dimen name="space_s">8dp</dimen>
-    <dimen name="space_m">16dp</dimen>
-    <dimen name="space_l">32dp</dimen>
-    <dimen name="space_xl">64dp</dimen>
-    <dimen name="space_xxl">128dp</dimen>
+	<dimen name="space_xs">4dp</dimen>
+	<dimen name="space_s">8dp</dimen>
+	<dimen name="space_m">16dp</dimen>
+	<dimen name="space_l">32dp</dimen>
+	<dimen name="space_xl">64dp</dimen>
+	<dimen name="space_xxl">128dp</dimen>
 
-    <dimen name="elevation">8dp</dimen>
-    <dimen name="status_bar_height">24dp</dimen>
-    <dimen name="nav_bar_height">48dp</dimen>
+	<dimen name="elevation">8dp</dimen>
+	<dimen name="status_bar_height">24dp</dimen>
+	<dimen name="nav_bar_height">48dp</dimen>
 </resources>

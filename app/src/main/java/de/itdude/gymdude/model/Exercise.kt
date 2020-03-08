@@ -6,19 +6,15 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.time.ZonedDateTime
 
+open class Exercise(@PrimaryKey var name: String = "", var bodyPart: BodyPart? = null, var imageUrl: String = "") : RealmObject() {
 
-open class Exercise(
-    @PrimaryKey var name: String = "",
-    var bodyPart: BodyPart? = null,
-    var imageUrl: String = ""
-) : RealmObject() {
+	var lastTimeDoneMs: Long? = null
+	var lastTimeDone: ZonedDateTime?
+		get() = ZonedDateTime(lastTimeDoneMs)
+		set(value) {
+			lastTimeDoneMs = value?.ms()
+		}
 
-    var lastTimeDoneMs: Long? = null
-    var lastTimeDone: ZonedDateTime?
-        get() = ZonedDateTime(lastTimeDoneMs)
-        set(value) {
-            lastTimeDoneMs = value?.ms()
-        }
+	override fun toString() = if (isValid) name else "INVALID"
 
-    override fun toString() = if (isValid) name else "INVALID"
 }

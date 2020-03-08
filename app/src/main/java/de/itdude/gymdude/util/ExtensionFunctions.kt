@@ -5,8 +5,17 @@ package de.itdude.gymdude.util
 import androidx.fragment.app.Fragment
 import de.itdude.gymdude.repo.db.FilterableLiveRealmCollection
 import de.itdude.gymdude.repo.db.LiveRealmCollection
-import io.realm.*
-import java.time.*
+import io.realm.OrderedRealmCollection
+import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.RealmList
+import io.realm.RealmModel
+import io.realm.RealmQuery
+import io.realm.RealmResults
+import java.time.Instant
+import java.time.LocalDate
+import java.time.Period
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import kotlin.reflect.KProperty
 
 // --- FRAGMENT ---
@@ -16,8 +25,7 @@ fun <T : Any> Fragment.autoCleared() = AutoClearedValue<T>(this)
 // --- DATE TIME ---
 
 fun ZonedDateTime(ms: Long?): ZonedDateTime? = ms?.let { ZonedDateTime(ms) }
-fun ZonedDateTime(ms: Long): ZonedDateTime =
-    ZonedDateTime.ofInstant(Instant.ofEpochMilli(ms), ZoneId.systemDefault())
+fun ZonedDateTime(ms: Long): ZonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(ms), ZoneId.systemDefault())
 
 fun ZonedDateTime.ms() = this.toInstant().toEpochMilli()
 fun ZonedDateTime.daysAgo() = Period.between(this.toLocalDate(), LocalDate.now()).days
@@ -29,22 +37,22 @@ fun <T : RealmModel> OrderedRealmCollection<T>.asLive() = LiveRealmCollection(th
 
 @Suppress("UNCHECKED_CAST")
 fun <T : RealmModel> OrderedRealmCollection<T>.addListener(listener: OrderedRealmCollectionChangeListener<*>) {
-    if (!isManaged || !isValid) return
-    when (this) {
-        is RealmResults<T> -> addChangeListener(listener as OrderedRealmCollectionChangeListener<RealmResults<T>>)
-        is RealmList<T> -> addChangeListener(listener as OrderedRealmCollectionChangeListener<RealmList<T>>)
-        else -> throw ClassCastException("A OrderedRealmCollectionChangeListener can only be added to a OrderedRealmCollection of type RealmResults or RealmList!")
-    }
+	if (!isManaged || !isValid) return
+	when (this) {
+		is RealmResults<T> -> addChangeListener(listener as OrderedRealmCollectionChangeListener<RealmResults<T>>)
+		is RealmList<T> -> addChangeListener(listener as OrderedRealmCollectionChangeListener<RealmList<T>>)
+		else -> throw ClassCastException("A OrderedRealmCollectionChangeListener can only be added to a OrderedRealmCollection of type RealmResults or RealmList!")
+	}
 }
 
 @Suppress("UNCHECKED_CAST")
 fun <T : RealmModel> OrderedRealmCollection<T>.removeListener(listener: OrderedRealmCollectionChangeListener<*>) {
-    if (!isManaged || !isValid) return
-    when (this) {
-        is RealmResults<T> -> removeChangeListener(listener as OrderedRealmCollectionChangeListener<RealmResults<T>>)
-        is RealmList<T> -> removeChangeListener(listener as OrderedRealmCollectionChangeListener<RealmList<T>>)
-        else -> throw ClassCastException("A OrderedRealmCollectionChangeListener can only be added to a OrderedRealmCollection of type RealmResults or RealmList!")
-    }
+	if (!isManaged || !isValid) return
+	when (this) {
+		is RealmResults<T> -> removeChangeListener(listener as OrderedRealmCollectionChangeListener<RealmResults<T>>)
+		is RealmList<T> -> removeChangeListener(listener as OrderedRealmCollectionChangeListener<RealmList<T>>)
+		else -> throw ClassCastException("A OrderedRealmCollectionChangeListener can only be added to a OrderedRealmCollection of type RealmResults or RealmList!")
+	}
 }
 
 // --- REALM QUERY SORT ---
@@ -62,29 +70,20 @@ fun <T> RealmQuery<T>.sort(fields: Array<KProperty<*>>, sortOrders: Array<Sort?>
 
 // --- REALM QUERY EQUAL TO ---
 
-fun <T> RealmQuery<T>.equalTo(field: KProperty<String?>, value: String?): RealmQuery<T> =
-    equalTo(field.name, value)
+fun <T> RealmQuery<T>.equalTo(field: KProperty<String?>, value: String?): RealmQuery<T> = equalTo(field.name, value)
 
-fun <T> RealmQuery<T>.equalTo(field: KProperty<Int?>, value: Int?): RealmQuery<T> =
-    equalTo(field.name, value)
+fun <T> RealmQuery<T>.equalTo(field: KProperty<Int?>, value: Int?): RealmQuery<T> = equalTo(field.name, value)
 
-fun <T> RealmQuery<T>.equalTo(field: KProperty<Float?>, value: Float?): RealmQuery<T> =
-    equalTo(field.name, value)
+fun <T> RealmQuery<T>.equalTo(field: KProperty<Float?>, value: Float?): RealmQuery<T> = equalTo(field.name, value)
 
-fun <T> RealmQuery<T>.equalTo(field: KProperty<Double?>, value: Double?): RealmQuery<T> =
-    equalTo(field.name, value)
+fun <T> RealmQuery<T>.equalTo(field: KProperty<Double?>, value: Double?): RealmQuery<T> = equalTo(field.name, value)
 
-fun <T> RealmQuery<T>.equalTo(field: KProperty<Byte?>, value: Byte?): RealmQuery<T> =
-    equalTo(field.name, value)
+fun <T> RealmQuery<T>.equalTo(field: KProperty<Byte?>, value: Byte?): RealmQuery<T> = equalTo(field.name, value)
 
-fun <T> RealmQuery<T>.equalTo(field: KProperty<Boolean?>, value: Boolean?): RealmQuery<T> =
-    equalTo(field.name, value)
+fun <T> RealmQuery<T>.equalTo(field: KProperty<Boolean?>, value: Boolean?): RealmQuery<T> = equalTo(field.name, value)
 
-fun <T> RealmQuery<T>.equalTo(field: KProperty<ByteArray?>, value: ByteArray?): RealmQuery<T> =
-    equalTo(field.name, value)
+fun <T> RealmQuery<T>.equalTo(field: KProperty<ByteArray?>, value: ByteArray?): RealmQuery<T> = equalTo(field.name, value)
 
-fun <T> RealmQuery<T>.equalTo(field: KProperty<Short?>, value: Short?): RealmQuery<T> =
-    equalTo(field.name, value)
+fun <T> RealmQuery<T>.equalTo(field: KProperty<Short?>, value: Short?): RealmQuery<T> = equalTo(field.name, value)
 
-fun <T> RealmQuery<T>.equalTo(field: KProperty<Long?>, value: Long?): RealmQuery<T> =
-    equalTo(field.name, value)
+fun <T> RealmQuery<T>.equalTo(field: KProperty<Long?>, value: Long?): RealmQuery<T> = equalTo(field.name, value)

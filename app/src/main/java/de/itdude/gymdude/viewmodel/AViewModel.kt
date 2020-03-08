@@ -9,17 +9,18 @@ import javax.inject.Inject
 
 abstract class AViewModel : ViewModel() {
 
-    @Inject
-    protected lateinit var repo: Repository
-    @Inject
-    protected lateinit var resources: Resources
+	@Inject
+	protected lateinit var repo: Repository
+	@Inject
+	protected lateinit var resources: Resources
 
-    lateinit var navigate: ((NavDirections) -> Unit)
-    lateinit var showToast: ((String) -> Unit)
+	lateinit var navigate: ((NavDirections) -> Unit)
+	lateinit var showToast: ((String) -> Unit)
 
-    @Inject @VisibleForTesting
-    protected fun onRepoInjected() = onCreate()
+	@Inject
+	@VisibleForTesting
+	protected fun onRepoInjected() = onCreate()
 
-    protected open fun onCreate() {}
+	protected open fun onCreate() {}
 
 }

@@ -5,15 +5,16 @@ import javax.inject.Inject
 
 class MenuViewModel @Inject constructor() : AViewModel() {
 
-    fun showSettings() {
-        navigate(MenuFragmentDirections.actionShowSettings())
-    }
+	fun showSettings() {
+		navigate(MenuFragmentDirections.actionShowSettings())
+	}
 
-    fun showExercises() {
-        navigate(MenuFragmentDirections.actionShowExercises())
-    }
+	fun showExercises() {
+		navigate(MenuFragmentDirections.actionShowExercises())
+	}
 
-    fun showWorkout() {
-        navigate(MenuFragmentDirections.actionShowWorkoutPlans())
-    }
+	fun showWorkout() {
+		navigate(MenuFragmentDirections.actionShowWorkoutPlans())
+	}
+
 }

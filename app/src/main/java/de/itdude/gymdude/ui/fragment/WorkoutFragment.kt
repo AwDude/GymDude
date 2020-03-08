@@ -10,15 +10,15 @@ import de.itdude.gymdude.viewmodel.WorkoutViewModel
 
 class WorkoutFragment : AFragment<WorkoutViewModel, FragmentWorkoutBinding>() {
 
-    private val args: WorkoutFragmentArgs by navArgs()
+	private val args: WorkoutFragmentArgs by navArgs()
 
-    override fun getViewModelClass() = WorkoutViewModel::class
-    override fun getLayoutID() = R.layout.fragment_workout
-    override fun getViewModelBindingID() = BR.vm
+	override fun getViewModelClass() = WorkoutViewModel::class
+	override fun getLayoutID() = R.layout.fragment_workout
+	override fun getViewModelBindingID() = BR.vm
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.workoutName = args.workoutName
-    }
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		viewModel.workoutName = args.workoutName
+	}
 
 }

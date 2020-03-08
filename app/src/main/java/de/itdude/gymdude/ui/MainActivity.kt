@@ -26,40 +26,40 @@ import de.itdude.gymdude.R
 import io.realm.Realm
 import javax.inject.Inject
 
-class MainActivity: DaggerAppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
-    @Suppress("ProtectedInFinal")
-    @Inject
-    protected lateinit var db: Realm
-    val clearFocusViews = ArrayList<View>()
+	@Suppress("ProtectedInFinal")
+	@Inject
+	protected lateinit var db: Realm
+	val clearFocusViews = ArrayList<View>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-        setContentView(R.layout.activity_main)
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+		setContentView(R.layout.activity_main)
+	}
 
-    override fun onDestroy() {
-        super.onDestroy()
-        clearFocusViews.clear()
-        if (!db.isClosed) {
-            db.close()
-        }
-    }
+	override fun onDestroy() {
+		super.onDestroy()
+		clearFocusViews.clear()
+		if (!db.isClosed) {
+			db.close()
+		}
+	}
 
-    override fun dispatchTouchEvent(ev: MotionEvent) = super.dispatchTouchEvent(ev).also {
-        clearFocusViews.removeAll { view ->
-            if (view.isAttachedToWindow) {
-                val rect = Rect()
-                view.getGlobalVisibleRect(rect)
-                if (!rect.contains(ev.x.toInt(), ev.y.toInt())) {
-                    view.clearFocus()
-                }
-                false
-            } else {
-                true
-            }
-        }
-    }
+	override fun dispatchTouchEvent(ev: MotionEvent) = super.dispatchTouchEvent(ev).also {
+		clearFocusViews.removeAll { view ->
+			if (view.isAttachedToWindow) {
+				val rect = Rect()
+				view.getGlobalVisibleRect(rect)
+				if (!rect.contains(ev.x.toInt(), ev.y.toInt())) {
+					view.clearFocus()
+				}
+				false
+			} else {
+				true
+			}
+		}
+	}
 
 }
