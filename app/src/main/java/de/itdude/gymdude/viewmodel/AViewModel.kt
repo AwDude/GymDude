@@ -11,6 +11,7 @@ abstract class AViewModel : ViewModel() {
 
 	@Inject
 	protected lateinit var repo: Repository
+
 	@Inject
 	protected lateinit var resources: Resources
 

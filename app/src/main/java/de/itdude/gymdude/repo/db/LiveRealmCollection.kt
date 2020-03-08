@@ -13,8 +13,8 @@ import io.realm.Sort
 import kotlin.reflect.KProperty
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-class LiveRealmCollection<T : RealmModel>(private var realmCollection: OrderedRealmCollection<T> = RealmList()) : LiveList<T>(
-	realmCollection) {
+class LiveRealmCollection<T : RealmModel>(private var realmCollection: OrderedRealmCollection<T> = RealmList()) :
+	LiveList<T>(realmCollection) {
 
 	private var savedSize = size
 

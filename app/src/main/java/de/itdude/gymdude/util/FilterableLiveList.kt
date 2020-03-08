@@ -1,8 +1,8 @@
 package de.itdude.gymdude.util
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-open class FilterableLiveList<T> private constructor(private var filtered: MutableList<T>, private var unfiltered: List<T>) : LiveList<T>(
-	filtered) {
+open class FilterableLiveList<T> private constructor(private var filtered: MutableList<T>, private var unfiltered: List<T>) :
+	LiveList<T>(filtered) {
 
 	protected var equals: (T, T) -> Boolean = { item1, item2 -> item1 == item2 }
 	private var filterPredicate: ((T) -> Boolean) = { true }

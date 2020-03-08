@@ -23,7 +23,7 @@ open class MutableLiveList<T>(private var list: MutableList<T> = mutableListOf()
 		notifyItemRangeInserted(index, elements.size)
 	}
 
-	override fun addAll(elements: Collection<T>) = list.addAll(elements).also {	notifyItemRangeInserted(size, elements.size) }
+	override fun addAll(elements: Collection<T>) = list.addAll(elements).also { notifyItemRangeInserted(size, elements.size) }
 
 	override fun clear() {
 		val itemCount = size
@@ -44,11 +44,11 @@ open class MutableLiveList<T>(private var list: MutableList<T> = mutableListOf()
 		notifyItemRangeRemoved(fromIndex, toIndex - fromIndex)
 	}
 
-	override fun removeAt(index: Int) = list.removeAt(index).also {	notifyItemRemoved(index) }
+	override fun removeAt(index: Int) = list.removeAt(index).also { notifyItemRemoved(index) }
 
 	override fun retainAll(elements: Collection<T>) = list.retainAll(elements).also { notifyDataSetChanged() }
 
-	override fun set(index: Int, element: T) = list.set(index, element).also { notifyItemChanged(index)	}
+	override fun set(index: Int, element: T) = list.set(index, element).also { notifyItemChanged(index) }
 
 	override fun iterator() = list.listIterator()
 
