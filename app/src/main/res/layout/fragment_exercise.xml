@@ -15,6 +15,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:paddingTop="@dimen/status_bar_height"
+		app:backgroundCenterCropped="@{@drawable/barbell_rack_xxxhdpi}"
 		tools:context=".ui.fragment.ExerciseFragment">
 
 		<include
@@ -26,9 +27,10 @@
 			android:id="@+id/exercises_rv"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
+			android:background="@null"
 			android:clipToPadding="false"
-			android:paddingTop="@dimen/space_xs"
 			android:paddingBottom="@dimen/space_xxl"
+			android:paddingTop="@dimen/space_xs"
 			app:itemBinding='@{"exercise"}'
 			app:itemLayout="@{@layout/item_exercise}"
 			app:items="@{vm.exercises}"
@@ -45,30 +47,28 @@
 
 		<com.google.android.material.floatingactionbutton.FloatingActionButton
 			android:id="@+id/edit_exercises_btn"
+			style="@style/FloatingActionButton"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="@dimen/space_m"
 			android:layout_marginBottom="@dimen/space_xl"
-			android:elevation="@dimen/space_s"
 			android:onClick="@{() -> vm.toggleEditable()}"
 			android:src="@{vm.isEditable ? @drawable/ic_stop_modify : @drawable/ic_modify}"
 			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:maxImageSize="@dimen/space_l" />
+			app:layout_constraintStart_toStartOf="parent" />
 
 		<com.google.android.material.floatingactionbutton.FloatingActionButton
 			android:id="@+id/add_exercise_btn"
+			style="@style/FloatingActionButton"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginEnd="@dimen/space_m"
 			android:layout_marginBottom="@dimen/space_xl"
-			android:elevation="@dimen/space_s"
-			android:visibility="@{vm.isEditable ? 0 : 8}"
 			android:onClick="@{() -> vm.addExercise()}"
 			android:src="@drawable/ic_add"
+			android:visibility="@{vm.isEditable ? 0 : 8}"
 			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:maxImageSize="@dimen/space_l" />
+			app:layout_constraintEnd_toEndOf="parent" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

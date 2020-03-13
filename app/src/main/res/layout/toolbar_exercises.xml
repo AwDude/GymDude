@@ -16,10 +16,11 @@
 		android:layout_height="?attr/actionBarSize"
 		android:background="?attr/colorPrimary"
 		android:elevation="@dimen/elevation"
-		android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+		android:theme="@style/Theme.Toolbar">
 
 		<Spinner
 			android:id="@+id/exercise_sort_spinner"
+			style="@style/Spinner"
 			android:layout_width="@dimen/space_l"
 			android:layout_height="@dimen/space_l"
 			android:layout_marginHorizontal="@dimen/space_m"
@@ -27,8 +28,6 @@
 			android:contentDescription="@string/content_exercise_sort_btn"
 			android:entries="@array/array_exercise_sort_options"
 			android:foreground="?android:attr/selectableItemBackground"
-			android:overlapAnchor="false"
-			android:spinnerMode="dropdown"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
@@ -40,7 +39,7 @@
 			android:layout_height="wrap_content"
 			android:text="@string/exercises"
 			android:textAlignment="center"
-			android:textSize="@dimen/text_size_l"
+			android:textSize="@dimen/text_size_xl"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toStartOf="@id/exercise_search_view"
 			app:layout_constraintStart_toEndOf="@+id/exercise_sort_spinner"

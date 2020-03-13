@@ -15,12 +15,11 @@
 	</data>
 
 	<androidx.cardview.widget.CardView
+		android:theme="@style/Theme.Item"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/space_xl"
-		android:layout_margin="@dimen/space_xs"
-		android:onClick="@{() -> vm.startWorkout(workout)}"
-		app:cardBackgroundColor="#AAAAAA"
-		app:cardCornerRadius="@dimen/space_s">
+		style="@style/Item"
+		android:onClick="@{() -> vm.startWorkout(workout)}">
 
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:layout_width="match_parent"

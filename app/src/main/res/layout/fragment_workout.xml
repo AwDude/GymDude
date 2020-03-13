@@ -17,25 +17,15 @@
 		android:paddingTop="@dimen/status_bar_height"
 		tools:context=".ui.fragment.WorkoutFragment">
 
-		<TextView
-			android:id="@+id/workout_name_tv"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:padding="@dimen/space_m"
-			android:text="@{vm.workoutName}"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			tools:text="WORKOUT NAME" />
-
 		<com.google.android.material.tabs.TabLayout
 			android:id="@+id/workout_tabs"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:background="@color/colorPrimary"
+			app:getTabLabel='@{vm.getTabLabel}'
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/workout_name_tv"
-			app:getTabLabel='@{vm.getTabLabel}'
+			app:layout_constraintTop_toTopOf="parent"
 			app:tabMode="scrollable"
 			app:viewPager="@{workoutPager}" />
 
@@ -46,16 +36,17 @@
 			android:layout_marginBottom="@dimen/nav_bar_height"
 			android:clipChildren="false"
 			android:clipToPadding="false"
-			android:padding="@dimen/space_m"
-			app:getBundle="@{vm.getBundle}"
+			android:padding="@dimen/space_s"
 			app:fragmentClass='@{"de.itdude.gymdude.ui.fragment.WorkoutExerciseFragment"}'
+			app:getBundle="@{vm.getBundle}"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@+id/workout_tabs"
 			app:pageDataList="@{vm.exercises}"
 			app:zoom="@{0.92f}"
-			app:zoomFade="@{0.5f}" />
+			app:zoomFade="@{0.5f}"
+			tools:background="@color/colorPrimaryDark" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

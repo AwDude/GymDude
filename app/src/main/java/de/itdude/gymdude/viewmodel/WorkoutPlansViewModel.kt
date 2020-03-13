@@ -55,7 +55,7 @@ class WorkoutPlansViewModel @Inject constructor() : AViewModel() {
 	// TODO create dialog
 	fun addWorkoutPlan() {
 		// TODO select new plan
-		val newWorkoutPlan = WorkoutPlan("3er Split ${workoutPlans.size}")
+		val newWorkoutPlan = WorkoutPlan("3er Split ${workoutPlans.size} dfgdfgdfgasd")
 		repo.addWorkoutPlan(newWorkoutPlan, {
 			selectedPlanIndex.value = workoutPlans.size - 1
 			isEditable.set(true)

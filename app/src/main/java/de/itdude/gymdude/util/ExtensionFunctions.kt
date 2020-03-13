@@ -4,6 +4,8 @@ package de.itdude.gymdude.util
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.graphics.Bitmap
+import android.media.ThumbnailUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import de.itdude.gymdude.repo.db.FilterableLiveRealmCollection
@@ -104,3 +106,24 @@ fun <T> RealmQuery<T>.equalTo(field: KProperty<Long?>, value: Long?): RealmQuery
 // --- REALM QUERY MAX ---
 
 fun <T> RealmQuery<T>.max(field: KProperty<*>) = max(field.name)
+
+// --- BITMAP ---
+
+fun Bitmap.centerCrop(width: Int, height: Int): Bitmap? {
+	val newRatio = width.toFloat() / height
+	val oldRatio = this.width.toFloat() / this.height
+
+	return if (newRatio < oldRatio) {
+		ThumbnailUtils.extractThumbnail(this, (this.height * newRatio).toInt(), this.height)
+	} else {
+		ThumbnailUtils.extractThumbnail(this, this.width, (this.width / newRatio).toInt())
+	}
+}
+
+
+		/*= if (width >= height) {
+	Bitmap.createBitmap(this, width / 2 - height / 2, 0, height, height)
+} else {
+	Bitmap.createBitmap(this, 0, height / 2 - width / 2, width, width);
+}
+*/

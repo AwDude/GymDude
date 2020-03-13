@@ -15,11 +15,10 @@
 	</data>
 
 	<androidx.cardview.widget.CardView
+		android:theme="@style/Theme.Item"
+		style="@style/Item"
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/space_xl"
-		android:layout_margin="@dimen/space_xs"
-		app:cardBackgroundColor="#AAAAAA"
-		app:cardCornerRadius="@dimen/space_s">
+		android:layout_height="@dimen/space_xl">
 
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:layout_width="match_parent"

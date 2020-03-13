@@ -3,7 +3,11 @@
 package de.itdude.gymdude.ui.adapter
 
 import android.content.ContextWrapper
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
@@ -24,6 +28,7 @@ import de.itdude.gymdude.ui.adapter.recyclerview.ItemMoveCallback
 import de.itdude.gymdude.ui.adapter.recyclerview.RecyclerViewAdapter
 import de.itdude.gymdude.util.LiveList
 import de.itdude.gymdude.util.MutableLiveList
+import de.itdude.gymdude.util.centerCrop
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -209,5 +214,12 @@ fun View.bindAutoFocusClear(autoFocusClearEnabled: Boolean) {
 	val activity = context
 	if (autoFocusClearEnabled && activity is MainActivity) {
 		activity.clearFocusViews.add(this)
+	}
+}
+
+@BindingAdapter("backgroundCenterCropped")
+fun View.bindBackgroundCenterCrop(drawable: Drawable) = post {
+	if (drawable is BitmapDrawable) {
+		background = BitmapDrawable(resources, drawable.bitmap.centerCrop(width, height))
 	}
 }
