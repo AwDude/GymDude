@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<variable
+			name="vm"
+			type="de.itdude.gymdude.viewmodel.WorkoutPlansViewModel" />
+
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:paddingTop="@dimen/status_bar_height"
+		app:backgroundCenterCropped="@{@drawable/barbell_weight_xxxhdpi}"
+		tools:context=".ui.fragment.WorkoutPlansFragment">
+
+		<include
+			android:id="@+id/workout_plans_toolbar"
+			layout="@layout/toolbar_workout_plans"
+			app:vm="@{vm}" />
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/workout_rv"
+			getItemID="@{vm.getItemID}"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:background="@null"
+			android:clipToPadding="false"
+			android:paddingTop="@dimen/space_xs"
+			android:paddingBottom="@dimen/space_xxl"
+			app:dragColor="@{@color/colorPrimary}"
+			app:dragViewID="@{@id/workout_item_drag_view}"
+			app:itemBinding='@{"workout"}'
+			app:itemLayout="@{@layout/item_workout}"
+			app:items="@{vm.selectedWorkouts}"
+			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/workout_plans_toolbar"
+			app:onItemMove="@{vm.onMoveWorkout}"
+			app:viewModel="@{vm}"
+			app:viewModelBinding='@{"vm"}'
+			tools:listitem="@layout/item_workout" />
+
+		<com.google.android.material.floatingactionbutton.FloatingActionButton
+			android:id="@+id/edit_workouts_btn"
+			style="@style/FloatingActionButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/space_m"
+			android:layout_marginBottom="@dimen/space_xl"
+			android:onClick="@{() -> vm.toggleEditable()}"
+			android:src="@{vm.isEditable ? @drawable/ic_stop_modify : @drawable/ic_modify}"
+			android:visibility="@{vm.workoutPlans.empty ? 8 : 0}"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+
+		<com.google.android.material.floatingactionbutton.FloatingActionButton
+			android:id="@+id/add_workout_btn"
+			style="@style/FloatingActionButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/space_m"
+			android:layout_marginBottom="@dimen/space_xl"
+			android:onClick="@{() -> vm.addWorkout()}"
+			android:src="@drawable/ic_add"
+			android:visibility="@{vm.isEditable ? 0 : 8}"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

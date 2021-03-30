@@ -1,40 +1,27 @@
 package de.itdude.gymdude.viewmodel
 
-import android.util.Log
-import de.itdude.gymdude.BR
-import de.itdude.gymdude.util.LiveDataList
+import android.os.Bundle
+import de.itdude.gymdude.model.Exercise
 import javax.inject.Inject
 
 class WorkoutViewModel @Inject constructor() : AViewModel() {
 
-    // provides RecyclerView the fields where to put created bindings (via BindingAdapter)
-    val viewModelBinding: Int = BR.vm
-    val itemBinding: Int = BR.item
+	companion object {
+		const val EXERCISE_KEY = "exerciseKey"
+	}
 
-    val workoutPlans = LiveDataList<String>()
-    val workouts = LiveDataList<String>()
+	lateinit var workoutName: String
+	val exercises = ArrayList<Exercise>()
 
-    var selectedPlan: String? = null
-    var selectedPos: Int? = null
+	// Data binding callbacks
+	val getTabLabel = fun(position: Int) = exercises[position].toString()
+	val getBundle = fun(exercise: Exercise) = Bundle().apply { putString(EXERCISE_KEY, exercise.name) }
 
-    // declaring the function like this makes it usable as data binding callback
-    val onSelectPlan = fun(position: Int) {
-        /*val plan = selectedPlan
-        val pos = selectedPos
-        selectedPos = position
-        selectedPlan = workoutPlans.removeAt(position)
-        if (plan != null && pos != null) {
-            workoutPlans.add(pos, plan)
-        }*/
-        Log.e("asd", position.toString())
-    }
-
-    init {
-        workoutPlans.addAll(arrayListOf("3er Split", "4er Split", "5er Split"))
-    }
-
-    fun addItem() = workouts.add("Item ${workouts.size}")
-
-    fun removeItem(item: String) = workouts.remove(item)
+	init {
+		exercises.add(Exercise("Exercise 0"))
+		exercises.add(Exercise("Exercise 1"))
+		exercises.add(Exercise("Exercise 2"))
+		exercises.add(Exercise("Exercise 3"))
+	}
 
 }

@@ -1,49 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+	<data>
 
-        <variable
-            name="vm"
-            type="de.itdude.gymdude.viewmodel.ExerciseViewModel" />
+		<variable
+			name="vm"
+			type="de.itdude.gymdude.viewmodel.ExerciseViewModel" />
 
-    </data>
+	</data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/status_bar_height"
-        tools:context=".ui.fragment.MenuFragment">
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:paddingTop="@dimen/status_bar_height"
+		app:backgroundCenterCropped="@{@drawable/barbell_rack_xxxhdpi}"
+		tools:context=".ui.fragment.ExerciseFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/exercises_rv"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/space_xs"
-            app:itemBinding="@{vm.itemBinding}"
-            app:itemLayout="@{@layout/item_exercise}"
-            app:items="@{vm.items}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/exercise_btn"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:viewModel="@{vm}"
-            app:viewModelBinding="@{vm.viewModelBinding}" />
+		<include
+			android:id="@+id/exercise_toolbar"
+			layout="@layout/toolbar_exercises"
+			app:vm="@{vm}" />
 
-        <Button
-            android:id="@+id/exercise_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> vm.addItem()}"
-            android:text="add item"
-            android:layout_marginBottom="@dimen/nav_bar_height"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/exercises_rv"
-            app:layout_constraintStart_toStartOf="parent" />
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/exercises_rv"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:background="@null"
+			android:clipToPadding="false"
+			android:paddingBottom="@dimen/space_xxl"
+			android:paddingTop="@dimen/space_xs"
+			app:itemBinding='@{"exercise"}'
+			app:itemLayout="@{@layout/item_exercise}"
+			app:items="@{vm.exercises}"
+			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintHorizontal_bias="0.0"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/exercise_toolbar"
+			app:layout_constraintVertical_bias="0.0"
+			app:viewModel="@{vm}"
+			app:viewModelBinding='@{"vm"}'
+			tools:listitem="@layout/item_exercise" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+		<com.google.android.material.floatingactionbutton.FloatingActionButton
+			android:id="@+id/edit_exercises_btn"
+			style="@style/FloatingActionButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/space_m"
+			android:layout_marginBottom="@dimen/space_xl"
+			android:onClick="@{() -> vm.toggleEditable()}"
+			android:src="@{vm.isEditable ? @drawable/ic_stop_modify : @drawable/ic_modify}"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+
+		<com.google.android.material.floatingactionbutton.FloatingActionButton
+			android:id="@+id/add_exercise_btn"
+			style="@style/FloatingActionButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/space_m"
+			android:layout_marginBottom="@dimen/space_xl"
+			android:onClick="@{() -> vm.addExercise()}"
+			android:src="@drawable/ic_add"
+			android:visibility="@{vm.isEditable ? 0 : 8}"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

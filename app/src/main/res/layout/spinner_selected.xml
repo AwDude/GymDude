@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Widget.AppCompat.TextView.SpinnerItem"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:ellipsize="marquee"
-    android:singleLine="true"
-    android:textAlignment="center"
-    android:padding="@dimen/space_m"/>
+		  xmlns:tools="http://schemas.android.com/tools"
+		  android:layout_width="match_parent"
+		  android:layout_height="match_parent"
+		  android:drawableEnd="@drawable/ic_arrow_down"
+		  android:ellipsize="marquee"
+		  android:paddingStart="@dimen/space_m"
+		  android:paddingEnd="@dimen/space_xs"
+		  android:gravity="center"
+		  android:singleLine="true"
+		  tools:text="SELECTED"
+		  tools:ignore="RtlSymmetry" />

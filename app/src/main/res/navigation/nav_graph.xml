@@ -1,37 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/nav_graph"
-            app:startDestination="@id/menuFragment">
+			xmlns:app="http://schemas.android.com/apk/res-auto"
+			xmlns:tools="http://schemas.android.com/tools"
+			android:id="@+id/nav_graph"
+			app:startDestination="@id/menuFragment">
 
-    <fragment
-        android:id="@+id/menuFragment"
-        android:name="de.itdude.gymdude.ui.fragment.MenuFragment"
-        android:label="fragment_menu"
-        tools:layout="@layout/fragment_menu" >
-        <action android:id="@+id/action_showSettings"
-                app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_showExercises"
-            app:destination="@id/exerciseFragment" />
-        <action
-            android:id="@+id/action_showWorkout"
-            app:destination="@id/workoutFragment" />
-    </fragment>
+	<fragment
+		android:id="@+id/menuFragment"
+		android:name="de.itdude.gymdude.ui.fragment.MenuFragment"
+		android:label="fragment_menu"
+		tools:layout="@layout/fragment_menu">
+		<action
+			android:id="@+id/action_showSettings"
+			app:destination="@id/settingsFragment" />
+		<action
+			android:id="@+id/action_showExercises"
+			app:destination="@id/exerciseFragment" />
+		<action
+			android:id="@+id/action_showWorkoutPlans"
+			app:destination="@id/workoutPlansFragment" />
+	</fragment>
 
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="de.itdude.gymdude.ui.fragment.SettingsFragment"
-        android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
-    <fragment
-        android:id="@+id/exerciseFragment"
-        android:name="de.itdude.gymdude.ui.fragment.ExerciseFragment"
-        android:label="ExerciseFragment" />
-    <fragment
-        android:id="@+id/workoutFragment"
-        android:name="de.itdude.gymdude.ui.fragment.WorkoutFragment"
-        android:label="WorkoutFragment" />
+	<fragment
+		android:id="@+id/settingsFragment"
+		android:name="de.itdude.gymdude.ui.fragment.SettingsFragment"
+		android:label="fragment_settings"
+		tools:layout="@layout/fragment_settings" />
+
+	<fragment
+		android:id="@+id/exerciseFragment"
+		android:name="de.itdude.gymdude.ui.fragment.ExerciseFragment"
+		android:label="ExerciseFragment"
+		tools:layout="@layout/fragment_exercise" />
+
+	<fragment
+		android:id="@+id/workoutPlansFragment"
+		android:name="de.itdude.gymdude.ui.fragment.WorkoutPlansFragment"
+		android:label="WorkoutPlansFragment"
+		tools:layout="@layout/fragment_workout_plans">
+		<action
+			android:id="@+id/action_showWorkout"
+			app:destination="@id/workoutFragment" />
+	</fragment>
+
+	<fragment
+		android:id="@+id/workoutFragment"
+		android:name="de.itdude.gymdude.ui.fragment.WorkoutFragment"
+		android:label="WorkoutFragment"
+		tools:layout="@layout/fragment_workout">
+		<argument
+			android:name="workoutName"
+			app:argType="string" />
+	</fragment>
 
 </navigation>

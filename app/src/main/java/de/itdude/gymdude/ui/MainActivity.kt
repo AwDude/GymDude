@@ -16,25 +16,50 @@
 
 package de.itdude.gymdude.ui
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
 import android.view.WindowManager
-import androidx.fragment.app.Fragment
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.support.DaggerAppCompatActivity
 import de.itdude.gymdude.R
+import io.realm.Realm
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
+class MainActivity : DaggerAppCompatActivity() {
 
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+	@Suppress("ProtectedInFinal")
+	@Inject
+	protected lateinit var db: Realm
+	val clearFocusViews = ArrayList<View>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-        setContentView(R.layout.activity_main)
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+		setContentView(R.layout.activity_main)
+	}
 
-    override fun supportFragmentInjector() = dispatchingAndroidInjector
+	override fun onDestroy() {
+		super.onDestroy()
+		clearFocusViews.clear()
+		if (!db.isClosed) {
+			db.close()
+		}
+	}
+
+	override fun dispatchTouchEvent(ev: MotionEvent) = super.dispatchTouchEvent(ev).also {
+		clearFocusViews.removeAll { view ->
+			if (view.isAttachedToWindow) {
+				val rect = Rect()
+				view.getGlobalVisibleRect(rect)
+				if (!rect.contains(ev.x.toInt(), ev.y.toInt())) {
+					view.clearFocus()
+				}
+				false
+			} else {
+				true
+			}
+		}
+	}
+
 }

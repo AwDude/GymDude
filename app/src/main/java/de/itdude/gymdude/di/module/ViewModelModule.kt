@@ -18,38 +18,53 @@ package de.itdude.gymdude.di.module
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import de.itdude.gymdude.di.ViewModelFactory
 import de.itdude.gymdude.di.ViewModelKey
-import de.itdude.gymdude.viewmodel.*
+import de.itdude.gymdude.viewmodel.ExerciseViewModel
+import de.itdude.gymdude.viewmodel.MenuViewModel
+import de.itdude.gymdude.viewmodel.SettingsViewModel
+import de.itdude.gymdude.viewmodel.WorkoutExerciseViewModel
+import de.itdude.gymdude.viewmodel.WorkoutPlansViewModel
+import de.itdude.gymdude.viewmodel.WorkoutViewModel
 
 @Suppress("unused")
 @Module
 abstract class ViewModelModule {
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(MenuViewModel::class)
-    abstract fun bindMenuViewModel(menuViewModel: MenuViewModel): ViewModel
+	@Binds
+	@IntoMap
+	@ViewModelKey(MenuViewModel::class)
+	abstract fun bindMenuViewModel(menuViewModel: MenuViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(SettingsViewModel::class)
-    abstract fun bindSettingsViewModel(settingsViewModel: SettingsViewModel): ViewModel
+	@Binds
+	@IntoMap
+	@ViewModelKey(SettingsViewModel::class)
+	abstract fun bindSettingsViewModel(settingsViewModel: SettingsViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(ExerciseViewModel::class)
-    abstract fun bindExerciseViewModel(exerciseViewModel: ExerciseViewModel): ViewModel
+	@Binds
+	@IntoMap
+	@ViewModelKey(ExerciseViewModel::class)
+	abstract fun bindExerciseViewModel(exerciseViewModel: ExerciseViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(WorkoutViewModel::class)
-    abstract fun bindWorkoutViewModel(workoutViewModel: WorkoutViewModel): ViewModel
+	@Binds
+	@IntoMap
+	@ViewModelKey(WorkoutPlansViewModel::class)
+	abstract fun bindWorkoutPlansViewModel(workoutPlansViewModel: WorkoutPlansViewModel): ViewModel
 
-    @Binds
-    abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+	@Binds
+	@IntoMap
+	@ViewModelKey(WorkoutViewModel::class)
+	abstract fun bindWorkoutViewModel(workoutViewModel: WorkoutViewModel): ViewModel
+
+	@Binds
+	@IntoMap
+	@ViewModelKey(WorkoutExerciseViewModel::class)
+	abstract fun bindWorkoutExerciseViewModel(workoutExerciseViewModel: WorkoutExerciseViewModel): ViewModel
+
+	@Binds
+	abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 
 }

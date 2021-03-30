@@ -7,8 +7,8 @@ import de.itdude.gymdude.viewmodel.SettingsViewModel
 
 class SettingsFragment : AFragment<SettingsViewModel, FragmentSettingsBinding>() {
 
-    override fun getViewModelClass() = SettingsViewModel::class
-    override fun getLayoutID() = R.layout.fragment_settings
-    override fun getViewModelBindingID() = BR.vm
+	override fun getViewModelClass() = SettingsViewModel::class
+	override fun getLayoutID() = R.layout.fragment_settings
+	override fun getViewModelBindingID() = BR.vm
 
 }

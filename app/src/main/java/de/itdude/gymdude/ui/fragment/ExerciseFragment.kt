@@ -7,8 +7,8 @@ import de.itdude.gymdude.viewmodel.ExerciseViewModel
 
 class ExerciseFragment : AFragment<ExerciseViewModel, FragmentExerciseBinding>() {
 
-    override fun getViewModelClass() = ExerciseViewModel::class
-    override fun getLayoutID() = R.layout.fragment_exercise
-    override fun getViewModelBindingID() = BR.vm
+	override fun getViewModelClass() = ExerciseViewModel::class
+	override fun getLayoutID() = R.layout.fragment_exercise
+	override fun getViewModelBindingID() = BR.vm
 
 }

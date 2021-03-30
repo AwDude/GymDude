@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<variable
+			name="vm"
+			type="de.itdude.gymdude.viewmodel.WorkoutPlansViewModel" />
+
+	</data>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="?attr/colorPrimary"
+		android:elevation="@dimen/elevation"
+		android:orientation="horizontal"
+		android:theme="@style/Theme.Toolbar">
+
+		<ImageView
+			android:id="@+id/workout_plan_add_btn"
+			style="?android:borderlessButtonStyle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:adjustViewBounds="true"
+			android:contentDescription="@string/content_workout_plan_add_btn"
+			android:onClick="@{() -> vm.addWorkoutPlan()}"
+			android:padding="@dimen/space_m"
+			android:src="@drawable/ic_add"
+			android:visibility="@{vm.isEditable ? 8 : 0}" />
+
+		<ImageView
+			android:id="@+id/workout_plan_edit_btn"
+			style="?android:borderlessButtonStyle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:adjustViewBounds="true"
+			android:contentDescription="@string/content_workout_plan_edit_btn"
+			android:onClick="@{() -> vm.renameWorkoutPlan()}"
+			android:padding="@dimen/space_m"
+			android:src="@drawable/ic_edit"
+			android:visibility="@{vm.isEditable ? 0 : 8}" />
+
+		<!--suppress AndroidUnknownAttribute -->
+		<de.itdude.gymdude.ui.view.AutoLockingSpinner
+			android:id="@+id/workout_plan_spinner"
+			style="@style/Spinner"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_gravity="center"
+			android:layout_margin="@dimen/space_xs"
+			android:layout_weight="1"
+			android:selectedItemPosition="@={vm.selectedPlanIndex}"
+			app:dropDownLayout="@{@layout/spinner_dropdown}"
+			app:hideSelected="@{true}"
+			app:items="@{vm.workoutPlans}"
+			app:selectedLayout="@{@layout/spinner_selected}"
+			tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
+		<ImageView
+			android:id="@+id/workout_plan_delete_btn"
+			style="?android:borderlessButtonStyle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:adjustViewBounds="true"
+			android:contentDescription="@string/content_workout_plan_delete_btn"
+			android:onClick="@{() -> vm.deleteWorkoutPlan()}"
+			android:padding="@dimen/space_m"
+			android:src="@drawable/ic_delete"
+			android:visibility="@{vm.isEditable ? 0 : 8}" />
+
+		<ImageView
+			android:id="@+id/workout_plan_history_btn"
+			style="?android:borderlessButtonStyle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:adjustViewBounds="true"
+			android:contentDescription="@string/content_workout_plan_history_btn"
+			android:onClick="@{() -> vm.showWorkoutPlanHistory()}"
+			android:padding="@dimen/space_m"
+			android:src="@drawable/ic_history"
+			android:visibility="@{vm.isEditable ? 8 : 0}" />
+
+	</LinearLayout>
+
+</layout>
